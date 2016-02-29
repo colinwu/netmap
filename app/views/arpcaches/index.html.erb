@@ -1,0 +1,82 @@
+<h2><%= @title -%></h2>
+<%
+uri = request.env['QUERY_STRING'].sub(/[&?]order=[^&]+/,'')
+nopage_uri = uri.sub(/^\/arpcache/,'/arpcache/nopage')
+if (uri =~ /\?/)
+  uri += '&'
+else
+  uri += '?'
+end
+session[:return_to] = request.env['QUERY_STRING']
+%>
+
+For faster response the results are displayed 25 records per page.
+<%
+unless (@s_ip.nil? && @s_mac.nil? && @s_router.nil?) -%>
+If you don't mind waiting you may display the full results on one page by clicking <a href="<%= nopage_uri %>">here</a> - to paste into an email message, for example.
+<% end -%>
+
+  <p>Click on column title to sort the results by that column or...</p>
+
+<div>
+<table class="list">
+<tr>
+  <TD class=small>Find IP addresses that start with
+    <%= form_tag(uri, :method => 'get') do %>
+    <%= text_field_tag 'ip', @s_ip, :size => 16, :class => 'small' %>
+    <%= submit_tag 'Find', :class => 'small' %>
+
+    <% end %>
+  </TD>
+  <TD class=small>Find MAC addresses that contain
+    <%= form_tag(uri, :method => 'get') do %>
+      <%= text_field_tag 'mac', @s_mac, :size => 16, :class => 'small' %>
+      <%= submit_tag 'Find', :class => 'small' %>
+    <% end %>
+  </TD>
+  <TD class=small>Find routers that start with
+    <%= form_tag(uri, :method => 'get') do %>
+      <%= text_field_tag 'router', @s_router, :size => 16, :class => 'small' %>
+      <%= submit_tag 'Find', :class => 'small' %>
+    <% end %>
+  </TD>
+  <TD></TD>
+  <TD></TD>
+  <TD></TD>
+</tr>
+
+<tr>
+<TH><a href="<%= uri+'order=bin_ip' -%>">IP Address</a></TH>
+<TH><a href="<%= uri+'order=mac' -%>">MAC addr</a></TH>
+<TH><a href="<%= uri+'order=router,bin_ip' -%>">Router</a></TH>
+<TH>Int</TH>
+<TH><a href="<%= uri+'order=updated_on' -%>">Last seen</a></TH>
+<TH></TH></tr>
+<% @arplist.each do |b| %>
+<tr class=<%= cycle("light", "dark") -%>>
+  <TD><%= b.ip %></TD>
+  <td><%= b.mac %></td>
+  <td><%= b.router %></td>
+  <td><%= b.if %></td>
+  <td><%= b.updated_on.strftime('%d-%b-%Y') %></td>
+  <td><%= link_to 'Del', b, method: :delete, data: {confirm: "Are you sure?"} %></span></td>
+  </tr>
+<% end %>
+</table>
+<%
+option = Hash.new
+unless @order.nil?
+  option[:order] = @order
+end
+unless @s_ip.nil?
+  option[:ip] = @s_ip
+end
+unless @mac.nil?
+  option[:mac] = @mac
+end
+unless @s_router.nil?
+  option[:router] = @s_router
+end
+-%>
+<%= will_paginate( @arplist, :params => option )%>
+</div>

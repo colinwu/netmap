@@ -1,0 +1,22 @@
+<h1>Reconfigure port <%=h @port.node.sysName -%>:<%=h @port.ifName -%></h1>
+<%= error_messages_for 'port' %>
+
+<% form_tag :action => 'update_vlan', :id => @port do %>
+
+<fieldset>
+<div class="row">
+
+<div class="form-element">
+<label for="port_oldvlan">Old Vlan: </label>
+<%= @port.vlan -%>
+</DIV>
+
+<div class="form-element">
+<label for="port_vlan">New Vlan: </label>
+<%= select 'port', 'vlan', @vlanOptions %>
+</div>
+
+</div>
+</fieldset>
+<%= submit_tag 'Update', :confirm => "Sure you want to reconfigure the switch?" %>
+<% end %>

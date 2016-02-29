@@ -1,0 +1,16 @@
+<h1>New Port</h1>
+<div id=notice_message>
+<%= flash[:notice] -%>
+</div>
+<div id=error_message>
+<%= flash[:error] -%>
+</div>
+<%= form_tag :action => 'create' do %>
+  <%= render :partial => 'form' %>
+  <%= submit_tag "Create" %>
+<% end %>
+<% if session[:return_to].empty? %>
+<%= link_to 'Back', session[:return_to] %>
+<% else %>
+<%= link_to 'Back', :action => 'index' %>
+<% end %>

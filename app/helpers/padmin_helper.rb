@@ -1,0 +1,2 @@
+module PadminHelper
+end

@@ -1,0 +1,11 @@
+
+<div class='depot-form'>
+<fieldset>
+<legend>New Building</legend>
+<%= form_tag :action => 'create' do %>
+  <%= render 'form' %>
+  <%= submit_tag "Create" %>
+<% end %>
+</fieldset>
+<%= link_to 'Back', :action => 'index' %>
+</div>

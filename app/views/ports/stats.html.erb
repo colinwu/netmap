@@ -1,0 +1,48 @@
+<% session[:return_to] = request.env['QUERY_STRING'] -%>
+<h1><%= @title %></h1>
+<table>
+<TR class="<%=cycle('light','dark')%>">
+<%
+if session[:user_level] == 0 %>
+  <TD><%= link_to 'Admin Status', toggle_admin_port_path(@port), :confirm => "Are you sure?" %></TD><TD><%= link_to image_tag("#{@portStatus[:admStatus]}.png", :title => "Click to toggle Admin Status", :width => '18px'), toggle_admin_port_path(@port), :confirm => 'Are you sure?'%></TD></TR>
+  <%
+else %>
+  <TD>Admin Status</TD><TD><%= image_tag("#{@portStatus[:admStatus]}.png", :title => "Admin Status", :width=>'18px')  %></TD>
+  <%
+end %>
+<TR class="<%=cycle('light','dark')%>">
+<TD>Op Status</TD><TD><%= image_tag("#{@portStatus[:oprStatus]}.png", :title=>"Op Status", :width=>"18px") %></TD></TR>
+<TR class="<%=cycle('light','dark')%>">
+<TD>Vlan</TD>
+<%
+if session[:user_level] == 0 %>
+  <TD><%= link_to @port[:vlan], edit_vlan_port_path(@port) %></TD>
+  <%
+else %>
+  <TD><%=h @port[:vlan] -%></TD>
+  <%
+end %>
+</TR>
+<TR class="<%=cycle('light','dark')%>">
+<TD>In Octets</TD><TD><%= number_with_delimiter(@portStatus[:inOctets]) %></TD></TR>
+<TR class="<%=cycle('light','dark')%>">
+<TD>Out Octets</TD><TD><%= number_with_delimiter(@portStatus[:outOctets]) %></TD></TR>
+<TR class="<%=cycle('light','dark')%>">
+<TD>In Errors</TD><TD><%= number_with_delimiter(@portStatus[:inErrors]) %></TD></TR>
+<TR class="<%=cycle('light','dark')%>">
+<TD>Out Errors</TD><TD><%= number_with_delimiter(@portStatus[:outErrors]) %></TD></TR>
+<TR class="<%=cycle('light','dark')%>">
+<TD>Mac Addresses</TD><TD><%= @portStatus[:macAddrList] %></TD></TR>
+<TR class="<%=cycle('light','dark')%>">
+
+<%
+@comment = @port[:comment]
+unless @events.nil?
+  @events.each do |e|
+    @comment += '<br/>' + e[:Comment]
+  end
+end
+%>
+
+<TD>Comments</TD><TD><%= @comment -%></TD></TR>
+</table>

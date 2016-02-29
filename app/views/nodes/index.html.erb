@@ -1,0 +1,82 @@
+<h2><%= @title -%></h2>
+<%
+uri = request.env['QUERY_STRING'].sub(/[?&]order=[^&]*/,'')
+if (uri =~ /\?/)
+  uri += '&'
+else
+  uri += '?'
+end
+%>
+<% session[:return_to] = request.env['QUERY_STRING'] -%>
+
+<%= link_to 'Add Switch', :action => 'new' -%>
+
+<table class="list">
+<tr><TD class="small">
+Find by device name
+  <% form_tag('/nodes', :method => 'get') do -%>
+    <%= text_field_tag 'sysname', @s_sysname, :class => 'small' -%>
+    <%= submit_tag 'Find', :class => 'small' -%>
+  <% end %>
+  </TD>
+  <TD class="small">
+  Find ip addresses that start with
+  <% form_tag('/nodes', :method => 'get') do -%>
+    <%= text_field_tag 'ip', @s_ip, :class => 'small' -%>
+    <%= submit_tag 'Find', :class => 'small' -%>
+  <% end -%>
+  </TD>
+  <TD class="small">
+  Find by device type
+  <% form_tag('/nodes', :method => 'get') do -%>
+    <%= text_field_tag 'platform', @s_platform, :class => 'small' -%>
+    <%= submit_tag 'Find', :class => 'small' -%>
+  <% end -%>
+  </TD>
+  <% if session[:user_level] == 0 %>
+  <TD class="small">
+  Find by password
+  <% form_tag('/nodes', :method => 'get') do -%>
+    <%= text_field_tag 'commstr', @s_commstr, :class => 'small' -%>
+    <%= submit_tag 'Find', :class => 'small' -%>
+  <% end -%>
+  </TD>
+  <% end %>
+</tr>
+<tr>
+<TH><a href="<%= uri+'order=sysname' -%>">sysName</a></TH>
+<TH><a href="<%= uri+'order=bin_ip' -%>">IP Address</a></TH>
+<TH><a href="<%= uri+'order=platform' -%>">Type</a></TH>
+<TH><a href="<%= uri+'order=capability' -%>">Capability</a></TH>
+<% if session[:user_level] === 0 %>
+<TH><a href="<%= uri+'order=commStr' -%>">SNMP pw</a></TH>
+<TH colspan=3>Actions</TH>
+<% else %>
+  <th>Show</th>
+<% end %>
+</tr>
+<% if session[:user_level] == 0 %>
+  <%= render :partial => 'nodes/list', :layout => false, :collection => @nodes %>
+<% else %>
+  <%= render :partial => 'nodes/list_unprivileged', :layout => false, :collection => @nodes %>
+<% end %>
+</table>
+<%
+option = Hash.new
+unless @order.nil?
+  option[:order] = @order
+end
+unless @s_ip.nil?
+  option[:ip] = @s_ip
+end
+unless @start.nil?
+  option[:sysname] = @s_sysname
+end
+unless @s_platform.nil?
+  option[:platform] = @s_platform
+end
+unless @s_commstr.nil?
+  option[:commstr] = @s_commstr
+end
+-%>
+<%= will_paginate(@nodes, :params => option) %>

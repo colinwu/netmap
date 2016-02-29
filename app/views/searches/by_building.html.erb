@@ -1,0 +1,26 @@
+<h1>Search By Building and Label</h1>
+<div id=notice_message>
+<%= flash[:notice] -%>
+</div>
+<div id=error_message>
+<%= flash[:error] -%>
+</div>
+
+<% form_tag 'find_by_building', :method => :get do %>
+  <fieldset>
+    <div class="row">
+      <div class='form-element'>
+        <label for="building_id">Building</label><br />
+        <%= select 'by_building', 'building_id', @building.collect {|b| ["#{b.short_name} - #{b.long_name}", b.id] } %>
+      </div>
+      <div class='form-element'>
+        <label for="by_building_label">Jack Label</label><br />
+        <%= text_field 'by_building', 'label' , {:class => 'text-input'} %>
+    <div class='small'>
+    You can use <strong>^</strong> and <strong>$</strong> to anchor the search string to the <strong>start</strong> and <strong>end</strong> of the string and <strong>*</strong> to represent <strong>any number of characters</strong>. Please note that even though you can use RegEx-like expressions here it is not true RegEx, so don't try anything fancy.
+    </div>
+      </div>
+      <%= submit_tag "Find" %>
+    </div>
+  </fieldset>
+<% end %>

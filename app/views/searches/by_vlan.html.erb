@@ -1,0 +1,19 @@
+<h1>Find Port or Jack by VLAN number</h1>
+<div id=notice_message>
+<%= flash[:notice] -%>
+</div>
+<div id=error_message>
+<%= flash[:error] -%>
+</div>
+
+<% form_tag 'find_by_vlan', :method => :get do %>
+<fieldset>
+<div class='row'>
+  <div class='field-element'>
+    <label>Vlan Number:</label><br />
+    <%= text_field_tag 'vlan'%>
+  </div>
+  <%= submit_tag 'Find' %>
+</div>
+</fieldset>
+<% end %>

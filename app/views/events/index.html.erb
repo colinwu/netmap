@@ -1,0 +1,45 @@
+<h2><%= @title -%></h2>
+
+  <table class="list">
+  <tr>
+    <TH rowspan=2>Device</TH>
+    <TH rowspan=2>Port</TH>
+    <TH rowspan=2>Jack Label</TH>
+    <TH rowspan=2>Building</TH>
+    <TH colspan=2>Disabled</TH>
+    <TH colspan=2>Enabled</TH>
+    <TH rowspan=2>Comments</TH>
+    <% if session[:user_level] == 0 %>
+    <TH colspan=2  rowspan=2>Actions</TH>
+    <% end %>
+  </tr>
+  <tr>
+    <TH>Who</TH>
+    <th>When</th>
+    <th>Who</th>
+    <th>When</th>
+  </tr>
+<%
+  @events.each do |e|
+%>
+  <tr class="<%= cycle("light", "dark") -%>">
+    <TD><%= e.port.node.sysName %></TD>
+    <TD><%= e.port.ifName %></TD>
+    <TD><%= e.port.label %></TD>
+    <TD><%= e.port.building.long_name %></TD>
+    <TD><%= e.whoDisabled %></TD>
+    <TD><%= e.whenDisabled %></TD>
+    <TD><%= e.whoEnabled %></TD>
+    <TD><%= e.whenEnabled %></TD>
+    <TD><%= e.comment %></TD>
+
+    <% if session[:user_level] = 0 %>
+    <td><span class="line_menu"><%= link_to 'Del', e, method: :delete, data: {:confirm => 'Are you sure?'} %></span></td>
+    <% end %>
+  </tr>
+<%  
+  end
+%>
+</table>
+
+<%= will_paginate(@events) %>

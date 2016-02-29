@@ -1,0 +1,19 @@
+<h1>Find Switch</h1>
+<div id=notice_message>
+<%= flash[:notice] -%>
+</div>
+<div id=error_message>
+<%= flash[:error] -%>
+</div>
+
+<% form_tag :action => 'find_by_platform' do %>
+<fieldset>
+<div class='row'>
+  <div class='field-element'>
+    <label>Search string:</label><br />
+    <%= text_field_tag 'platform'%>
+  </div>
+  <%= submit_tag 'Find' %>
+</div>
+</fieldset>
+<% end %>

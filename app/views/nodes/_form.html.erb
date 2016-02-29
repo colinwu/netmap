@@ -1,0 +1,56 @@
+<!--[form:node_form]-->
+<%= form_for(@node) do |f| %>
+  <% if @node.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@node.errors.count, "error") %> prohibited this record from being saved:</h2>
+
+      <ul>
+      <% @node.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <fieldset>
+    <div class="row">
+      <h3>Device Info</h3>
+      <div class="form-element">
+        <label for="node_sysName">Name</label><br />
+        <%= f.text_field :sysName -%>
+        <span CLASS="explanation">This should be the host name configured on the device.</span>
+      </div>
+      <div class="form-element">
+        <label for="node_ip">IP Address</label><br />
+        <%= f.text_field :ip %>
+      </div>
+      <div class="form-element">
+        <label>Device Platform String</label><br />
+        <%= f.text_field :platform %>
+        <span CLASS="explanation">The value entered here will be ignored if the device is SNMP enabled.</span>
+      </div>
+      <div class="form-element">
+        <label for="node_commStr">Read Community String </label><br />
+        <%= f.text_field :commStr, {:class=>"text-input"} %>
+        <span CLASS="explanation">Leave as '**UNKNOWN**' if you don't know the SNMP Community String or if the device is not on the network yet.<br>  <font color="red">Remember to come back and reset this once the switch is connected.</font></span>
+      </div>
+      <div class="form-element">
+        <label for="node_writeStr">Write Community String </label><br />
+        <%= f.text_field :writeStr, {:class=>"text-input"} %>
+        <span CLASS="explanation">Leave as '**UNKNOWN**' if you don't know the SNMP Community String or if the device is not on the network yet.<br>  <font color="red">Remember to come back and reset this once the switch is connected.</font></span>
+      </div>
+      <div class="form-element">
+        <label for="node_capability">Capability</label><br />
+        <%= f.text_field :capability, {:class=>"text-input"} %>
+        <span CLASS="explanation">An odd number means the device is a router</span>
+      </div>
+      <div class="form-element">
+      <label>Building</label><br />
+      <%= select 'port', 'building_id', @building, {:include_blank => true} %>
+      <span CLASS="explanation">Leaving the building blank leaves it unchanged."</span>
+      </div>
+      </div>
+    <!-- We'll figure out the 'platform' and 'capability' data ourselves -->
+  </fieldset>
+  <%= submit_tag %>
+<!--[eoform:node_form]-->
+<% end %>

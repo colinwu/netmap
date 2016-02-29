@@ -1,0 +1,35 @@
+<!-- <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd"> -->
+<html xmlns="http://www.w3.org/1998/xhtml" lang="en">
+<head>
+  <TITLE><%= @title -%></TITLE>
+  <%= javascript_include_tag :defaults %>
+  <%= stylesheet_link_tag 'netmap.css' %>
+</head>
+<body>
+  <div id="container">
+    <div class="right">
+      <% unless session[:user_id].nil? %>
+      logged in as <%= User.find(session[:user_id]).name %>
+      [<%= link_to "logout", '/login/logout' %>]<br />
+      <% end %>
+    </div>
+    <div class="hz_menu">
+      <%= link_to "Home", "/" %>
+      &nbsp;|&nbsp;
+      <%= link_to "Buildings", "/building" %>
+      &nbsp;|&nbsp;
+      <%= link_to "Switches", "/node" %>
+    </div>
+    <div id="content">
+      <div id="notice_message">
+        <%= flash[:notice] %>
+      </div>
+      <div id="error_message">
+        <%= flash[:error] %>
+      </div>
+      <%= @content_for_layout %>
+    </div>
+  </div>
+
+</body>
+</html>

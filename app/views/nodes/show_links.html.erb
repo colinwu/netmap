@@ -1,0 +1,55 @@
+<h2>Links for <%= link_to @node.sysName, {:action => 'show_jacks', :id => @node}, :title => "Show ports" -%></h2>
+
+<% if session[:user_level] == 0 %>
+  <%= link_to 'Add Link', {:controller => 'links', :action => 'new', :id => @node.id}, :class => 'menu_link' %>
+  <% if @node.commStr != '**UNKNOWN**' %>
+    <%= link_to 'Detect Links', {:controller => 'links', :action => 'detect', :id => @node.id}, :class => 'menu_link' %>
+  <% end %>
+<% end %>
+
+<% session[:return_to] = request.env['QUERY_STRING'] -%>
+
+<% if @port.empty? -%>
+<h3>No links defined</h3>
+<% else -%>
+  <table class="list">
+  <tr><TH>Local Port</TH><TH>Remote Port</TH><TH>Remote Device</TH><TH>Cap</TH>
+  <% if session[:user_level] == 0 %>
+    <TH colspan=2>Actions</TH>
+  <% end %>
+  </tr>
+<%
+  @port.each do |p|
+    next if p.links.empty?
+    p.links.each do |l|
+%>
+    <tr class="<%= cycle("light", "dark") -%>">
+      <TD><%= p.ifName %></TD>
+
+<%    if p.id == l.port_a_id %>
+<%      if l.port_b.nil? %>
+          <td>NIL</td>
+          <td>NIL</td>
+<%      else %>
+          <td><%= l.port_b.ifName %></td>
+          <td><%= link_to l.port_b.node.sysName, :action => 'show_links', :id => l.port_b.node %></td>
+        <td><%= l.port_a.node.capability %></td>
+<%      end %>
+
+<%    else %>
+
+        <td><%= l.port_a.ifName %></td>
+        <td><%= link_to l.port_a.node.sysName, :action => 'show_links', :id => l.port_a.node %></td>
+        <td><%= l.port_a.node.capability %></td>
+
+<%    end %>
+
+<%    if session[:user_level] == 0 %>
+      <td><span class="line_menu"><%= link_to 'Edit', :controller => 'links', :action => 'edit', :id => l %></span></td>
+      <td><span class="line_menu"><%= link_to 'Del', l, method: :delete, data: {confirm: 'Are you sure?'} %></span></td>
+<%    end %>
+    </tr>
+  <%  end
+    end
+  end -%>
+</table>

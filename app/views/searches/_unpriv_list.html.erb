@@ -1,0 +1,7 @@
+<TR class=<%= cycle('light','dark') -%>>
+  <TD><%= unpriv_list.label -%></TD>
+  <TD><%= unpriv_list.node.sysName -%></TD>
+  <TD><img src='/images/<%="#{@adminStatus[unpriv_list.id]}.png"%>'><img src='/images/<%="#{@opStatus[unpriv_list.id]}.png"%>'></TD>
+  <TD><%= unpriv_list.vlan -%></TD>
+  <TD><%= unpriv_list.comment -%></TD>
+</TR>

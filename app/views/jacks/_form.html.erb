@@ -1,0 +1,23 @@
+<fieldset>
+	<div class="row">
+		<!--[form:port]-->
+    <div class="form-element">
+      <label for="building_jack">Building</label>
+      <%= select 'jack', 'building_id' , Building.find(:all, :order => 'long_name').collect {|n| [ n.short_name, n.id ] } %>
+    </div>
+    <div class="form-element">
+      <label for="jack-port">Name</label>
+      <%= select 'jack', 'port_id', Port.find(:all).collect { |p| [p.node.sysName + ': ' + p.ifName, p.id ] } %>
+    </div>
+    <div class="form-element">
+      <label for="label">Jack Label</label>
+      <%= text_field 'jack', 'label', {:class=>"text-input"} %>
+    </div>
+    <div class="form-element">
+      <label for="comment">Comment</label>
+      <%= text_field 'jack', 'comment', {:class=>"text-input"} %>
+    </div>
+<!--[eoform:port]-->
+
+	</div>
+</fieldset>

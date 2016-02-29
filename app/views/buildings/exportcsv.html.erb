@@ -1,0 +1,7 @@
+<% uri = request.request_uri.sub(/exportcsv/, 'show_jacks') -%>
+<a href="<%= uri -%>">Return to table view</a><br />
+<h2><%= @title -%></h2>
+Jack Label,Switch,Port,Vlan,Comment<br />
+<% @jacks.each do |j| -%>
+<%= j.label -%>,<%= j.node.sysName -%>,<%= j.ifName -%>,<%= j.vlan -%>,<%= j.comment -%><br />
+<% end -%>

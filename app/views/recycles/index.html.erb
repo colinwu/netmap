@@ -1,0 +1,48 @@
+<h1><%= @title -%></h1>
+<%
+uri = request.request_uri.sub(/[&?]order=[^&]+/,'')
+nopage_uri = uri.sub(/^\/recycle/,'/recycle/nopage')
+if (uri =~ /\?/)
+  uri += '&'
+else
+  uri += '?'
+end
+session[:return_to] = request.request_uri
+%>
+<div style="background-color: #ffff88; padding:10">
+<h3>Caution</h3>
+This output should not be taken as the final authority for recycling IP addresses. <STRONG>It is possible for addresses to appear in this list but still be in use.</STRONG> Use due diligence to examine each address being recycled.
+</div>
+<div>
+<h3>In <%= @net -%> subnet</h3>
+<ul>
+<LI><%= @numUsed -%> addresses are registered in WebDNS</LI>
+<LI><%= @candidates.length -%> addresses are eligible to be recycled</LI>
+</ul>
+<table class="list">
+<tr>
+<TD class=small colspan="4">Subnet (/24) to check (e.g. 130.113.69)
+  <% form_tag(uri, :method => 'get') do %>
+    <%= text_field_tag 'net', @s_net, :size => 16 %>
+    <%= submit_tag 'Find' %>
+  <% end %>
+</TD>
+</tr>
+<tr>
+<TH><a href="<%= uri+'order=bin_ip' -%>">IP Address</a></TH>
+<TH><a href="<%= uri+'order=mac' -%>">MAC</a></TH>
+<TH><a href="<%= uri+'order=name' -%>">Hostname</a></TH>
+<TH><a href="<%= uri+'order=updated_on' -%>">Last Seen</a></TH>
+</tr>
+
+<% @candidates.each do |row| %>
+  <tr class="<%= cycle("light", "dark") -%>">
+  <TD><%= row[:ip] %></TD>
+  <td><%= row[:mac] %></td>
+  <td><%= row[:name] %></td>
+  <td><%= row[:updated_on] %></td>
+  </tr>
+<% end %>
+</table>
+
+<%

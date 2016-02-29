@@ -1,0 +1,45 @@
+<h2><%= @title -%></h2>
+
+<% if session[:user_level] == 0 %>
+<%= link_to 'Add Port/Jack', :controller => 'ports', :action => 'new' %>
+<% end %>
+
+  <table class="list">
+  <tr>
+    <TH>Device</TH>
+    <TH>Port</TH>
+    <TH>Jack Label</TH>
+    <TH>Building</TH>
+    <TH>vlan</TH>
+    <TH>Comments</TH>
+    <% if session[:user_level] == 0 %>
+    <TH colspan=2>Actions</TH>
+    <% end %>
+  </tr>
+<%
+  @node.each do |n|
+    n.ports.each do |p|
+%>
+  <tr class="<%= cycle("light", "dark") -%>">
+    <TD><%= n.sysName %></TD>
+    <TD><%= best_in_place p, :ifName, :as => :input %></TD>
+    <TD><%= best_in_place p, :label, :as => :input %></TD>
+    <TD><%= best_in_place p, :building_id, :as => :select, :collection => @building %></TD>
+    <TD><% if p.vlan.nil? %>
+    -
+    <% elsif p.vlan == 0 %>
+      trunk
+    <% else %>
+      <%= link_to(p.vlan, {:controller => 'ports', :action => 'edit_vlan', :id => p}) %>
+    <% end %>
+    </TD>
+    <TD><%= best_in_place p, :comment, :as => :input %></TD>
+
+    <% if session[:user_level] = 0 %>
+    <td><span class="line_menu"><%= link_to 'Edit', :controller => 'ports', :action => 'edit', :id => p %></span></td>
+    <td><span class="line_menu"><%= link_to 'Del', p, method: :delete, data: {:confirm => 'Are you sure?'} %></span></td>
+    <% end %>
+  </tr>
+<%  end
+  end -%>
+</table>

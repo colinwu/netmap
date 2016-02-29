@@ -1,0 +1,23 @@
+<h2>Building List</h2>
+<% if session[:user_level] == 0 %>
+<%= link_to 'Add Building', new_building_path %>
+<% end %>
+<div>
+<table class="list">
+<tr><TH>Long Name</TH><TH>Short Name</TH><TH>Bldg No</TH><TH colspan=3>Actions</TH></tr>
+<% @building.each do |b| %>
+<tr class="<%= cycle("light", "dark") -%>">
+  <TD><%= b.long_name %></TD>
+  <td><%= b.short_name %></td>
+  <td><%= b.bldg_number %></td>
+  <td><span class="line_menu">
+    <%= link_to 'Edit', :action => 'edit', :id => b %></span></td>
+  <td>Show: <span class="line_menu">
+    <%= link_to 'Switches', :action => 'show_nodes', :id => b %>|
+    <%= link_to 'Jacks', :action => 'show_ports', :id => b %></span></td>
+  <td><span class="line_menu">
+  <%= link_to 'Del', {:action => 'destroy', :id => b}, :confirm => "Deleting this building will also delete all switches and jacks associated with this building. Continue?" %></span></td>
+  </tr>
+<% end %>
+</table>
+</div>

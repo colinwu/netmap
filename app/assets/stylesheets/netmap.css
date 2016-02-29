@@ -1,0 +1,148 @@
+body {
+  background-color: #f0f0f0
+}
+
+#container {
+  margin-left : 3%;
+  margin-right : 3%;
+  background-color: white;
+  border: 3px solid #aaa;
+  border-top: none;
+  padding: 10px;
+}
+
+#notice_message {
+  color: green;
+  width: 100%;
+  text-align: center;
+}
+
+#error_message {
+  color: red;
+  width: 100%;
+  text-align: center;
+}
+
+.depot-form fieldset {
+  background: #efe;
+}
+
+.depot-form legend {
+  color: #dfd;
+  background: #141;
+  font-family: sans-serif;
+  padding: 0.2em 1em;
+}
+
+.depot-form label {
+  width: 10em;
+  float: left;
+  text-align: right;
+  margin-right: 0.5em;
+  display: block;
+}
+
+.depot-form .submit {
+  margin-left: 5.5em;
+}
+
+.hz_menu {
+  text-align: center;
+  width: 100%;
+}
+
+.hz_menu A.hover {
+  border: 1px dotted black;
+}
+
+.explanation {
+  font-size: small;
+  margin-left: 2em;
+  display: block;
+}
+
+.form-element {
+  margin-top: .5em;
+}
+
+.form-element input,select {
+  margin-left: 2em;
+  padding: 1px;
+  font-size: 9pt;
+}
+
+.fieldWithErrors {
+  padding: 2px;
+  background-color: red;
+  display: table;
+}
+
+.line_menu {
+  font-size: .7em;
+  padding: 0 .1em;
+}
+
+.line_menu a.hover {
+  border: 1px dotted black;
+  background-color: white;
+}
+
+.list {
+  width: 100%;
+}
+
+.menu_link {
+  margin-right: 1em;
+  border: 1px dotted black;
+}
+
+.small {
+  font-size: .7em;
+}
+
+code {
+  color: #0f0;
+  background-color: black;
+  padding: 0 .5em;
+}
+
+fieldset {
+  background-color: #c7ffed;
+  font-size: 1.2em;
+}
+
+td {
+  padding: .2em .5em;
+  font-family:monospace;
+}
+
+th {
+  background-color: black;
+  color: white;
+  padding: .1em .5em;
+}
+
+th a {
+  color: white;
+}
+
+th a.hovor {
+  color: yellow;
+}
+
+a img {
+  border: 0;
+}
+
+.dark {
+  background-color: #aaccfe;
+}
+
+.light {
+  background-color: #daf2ff;
+}
+
+.right {
+  text-align: right;
+  width: 100%;
+}

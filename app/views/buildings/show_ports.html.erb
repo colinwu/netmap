@@ -1,0 +1,39 @@
+<h1><%= @title -%></h1>
+<%
+uri = request.request_uri.sub(/[&?]order=[^&]+/,'')
+exporturi = request.request_uri.sub(/show_ports/, 'portscsv')
+if (uri =~ /\?/)
+  uri += '&'
+else
+  uri += '?'
+end
+session[:return_to] = request.request_uri
+-%>
+<a href="<%= exporturi -%>">Export as CSV</a>
+<table class="list">
+<TR>
+<TH>Switch</TH>
+<TH>Port</TH>
+<TH>Label</TH>
+<TH>Vlan</TH>
+<TH>Comment</TH>
+<TH>Action</TH>
+</TR>
+<% for @port in @ports %>
+  <TR class="<%= cycle('light','dark') -%>">
+  <TD><%=h @port.node.sysName %></TD>
+  <TD><img src='/images/<%="#{@adminStatus[@port.id]}.png"%>' title="Admin Status" width='18px' /><img src='/images/<%="#{@opStatus[@port.id]}.png"%>' title="Op Status" width='18px' /></span><span style="vertical-align:middle">&nbsp;<%=h @port.ifName %></TD>
+  <% if session[:user_level] == 0%>
+    <TD><%= in_place_editor_field :port, 'label' %></TD>
+    <TD><%= in_place_editor_field :port, 'vlan' %></TD>
+    <TD><%= in_place_editor_field :port, 'comment' %></TD>
+    <TD><span class="line_menu"><%= link_to image_tag("info.jpg", :size => "14x15", :alt => 'Status'), {:controller => 'port', :action => 'stats', :id => @port} %></span>
+    <span class="line_menu"><%= link_to image_tag("edit.png", :size => "14x14", :alt => 'Edit'), {:controller => 'port', :action => 'edit', :id => @port} %></span>
+    <span class="line_menu"><%= link_to image_tag('editdelete.png', :size => '14x14', :alt => 'Del'), {:controller => 'port', :action => 'destroy', :id => @port}, :confirm => 'Are you sure?' %></span></TD>
+    <% else %>
+    <TD><%=h @port.label %></TD>
+    <TD><%=h @port.vlan %></TD>
+    <TD><%=h @port.comment %></TD>
+  <% end %>
+  </TR>
+<% end %>

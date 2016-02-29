@@ -1,0 +1,2 @@
+#!/bin/sh
+mysqldump -u netmap -pnutbar -hnetmap.mcmaster.ca netmap_production > /var/www/netmap/current/log/netmap_production.sql

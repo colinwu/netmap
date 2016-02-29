@@ -1,0 +1,31 @@
+<fieldset>
+	<div class="row">
+		<!--[form:port]-->
+    <div class="form-element">
+      <label for="port_building_id">Building</label><br />
+      <%= select 'port', 'building_id', @building %>
+    </div>
+    <div class="form-element">
+      <label for="port_node_id">Device</label><br />
+      <%= select 'port', 'node_id' , Node.all.order('sysName').collect {|n| [ n.sysName, n.id ] } %>
+    </div>
+    <div class="form-element">
+      <label for="port_ifName">Port Name</label><br />
+      <%= text_field 'port', 'ifName' , {:class=>"text-input"} %>
+    </div>
+    <div class="form-element">
+      <label for="port_label">Jack Label</label><br />
+      <%= text_field 'port', 'label', {:class=>"text-input"} %>
+    </div>
+    <div class="form-element">
+      <label for="port_comment">Comment</label><br />
+      <%= text_field 'port', 'comment', {:class=>"text-input"} %>
+    </div>
+    <div class="form-element">
+      <label for="port_vlan">Vlan</label><br />
+      <%= select 'port', 'vlan', @vlanOptions %>
+    </div>
+<!--[eoform:port]-->
+
+	</div>
+</fieldset>

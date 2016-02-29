@@ -1,0 +1,11 @@
+<h1>Add a New User</h1>
+<div class="depot-form">
+
+<fieldset>
+<legend>Enter User Details</legend>
+<%= form_tag :action => 'add_user', :id => @user do %>
+  <%= render :partial => 'form' %>
+  <%= submit_tag "Add User", :class=>'submit' %>
+  <% end %>
+</fieldset>
+</div>

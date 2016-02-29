@@ -1,0 +1,10 @@
+<h1>All Users</h1>
+
+<table class=list>
+<tr><th>User</th><th>Level</th><th>Actions</th></tr>
+<% for user in @all_users %>
+<TR class="<%= cycle("light", "dark") -%>"><TD><%=h user.name %></TD><TD><%= user.role %></TD><TD>
+<%= link_to image_tag("editdelete.png", :size => "14x14", :alt => 'Del'), delete_user_login_path(user), method: :delete, data: {confirm: "Are you sure?"} %>&nbsp;
+<%= link_to image_tag("edit.png", :size => "14x14", :alt => 'Edit'), edit_user_login_path(user)  %></TD></TR>
+<% end %>
+</table>

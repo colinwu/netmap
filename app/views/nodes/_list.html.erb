@@ -1,0 +1,11 @@
+<tr class="<%= cycle("light", "dark") -%>">
+  <TD><%= list.sysName %></TD>
+  <td><%= list.ip %></td>
+  <td><%= list.platform %></td>
+  <td><%= list.capability %></td>
+  <td><%= list.commStr %></td>
+  <td><span class="line_menu"><%= link_to 'Edit', edit_node_path(list) -%></span></td>
+  <td>Show:<span class="line_menu">
+  <%= link_to 'Links', show_links_node_path(list) -%>|<%= link_to 'Jacks', show_jacks_node_path(list) -%></span></td>
+  <td><span class="line_menu"><%= link_to 'Del', list, method: :delete, data: {confirm: 'Deleting this switch will also delete all ports/jacks associated with this switch. Continue?'} %></span></td>
+</tr>

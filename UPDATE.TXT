@@ -1,0 +1,38 @@
+Convert to latest RoR
+
+Fetching: activesupport-2.3.11.gem (100%)
+Successfully installed activesupport-2.3.11
+Fetching: rack-1.1.6.gem (100%)
+Successfully installed rack-1.1.6
+Fetching: actionpack-2.3.11.gem (100%)
+Successfully installed actionpack-2.3.11
+Fetching: actionmailer-2.3.11.gem (100%)
+Successfully installed actionmailer-2.3.11
+Fetching: activerecord-2.3.11.gem (100%)
+Successfully installed activerecord-2.3.11
+Fetching: activeresource-2.3.11.gem (100%)
+Successfully installed activeresource-2.3.11
+Fetching: rails-2.3.11.gem (100%)
+rails's executable "rails" conflicts with railties
+Overwrite the executable? [yN]  ^CERROR:  Interrupted
+
+/usr/share/gems
+/usr/share/gems/gems
+/usr/lib64/gems
+/usr/lib/gems
+/usr/local/share/gems
+/usr/local/share/gems/gems
+/usr/local/lib64/gems
+/usr/local/rvm/rubies/ruby-2.2.3/lib/ruby/gems
+/usr/local/rvm/rubies/ruby-2.2.3/lib/ruby/gems/2.2.0/gems
+/usr/local/rvm/rubies/ruby-2.2.1/lib/ruby/gems
+/usr/local/rvm/src/ruby-2.2.3/gems
+/usr/local/rvm/src/ruby-2.2.1/gems
+/usr/local/rvm/gems
+/usr/local/rvm/gems/ruby-2.2.3/gems
+/usr/local/rvm/gems/ruby-2.2.3@SharpAlert/gems
+/usr/local/rvm/gems/ruby-2.2.1/gems
+/usr/local/rvm/gems/ruby-2.2.1@RubyTest/gems
+/usr/local/bin/Aptana_Studio_3/plugins/org.jruby_1.6.4.1331328108/lib/ruby/gems
+/usr/local/bin/Aptana_Studio_3/plugins/org.jruby_1.6.4.1331328108/lib/ruby/gems/1.8/gems
+[

@@ -1,0 +1,9 @@
+<div class='depot-form'>
+<fieldset>
+<legend>Editing <%= @building.long_name %></legend>
+<% form_tag :action => 'update', :id => @building do %>
+  <%= render :partial => 'form' %>
+  <%= submit_tag 'Update' %>
+<% end %>
+</fieldset>
+</div>

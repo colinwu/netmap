@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Netmap</title>
+  <%= stylesheet_link_tag    'application', media: 'all' %>
+  <%= javascript_include_tag 'application' %>
+  <%= csrf_meta_tags %>
+  <meta name="author" content="Colin Wu">
+  <%= yield(:head) %>
+</head>
+<body>
+  <div id="container">
+    <div class="right">
+      <% unless session[:user_id].nil? %>
+      logged in as <%= User.find(session[:user_id]).name %>
+      [<%= link_to "logout", '/logins/logout' %>]<br />
+      <% end %>
+    </div>
+    <div class="hz_menu">
+      <%= link_to "Home", "/" %>
+      &nbsp;|&nbsp;
+      <%= link_to "Buildings", buildings_path %>
+      &nbsp;|&nbsp;
+      <%= link_to "Switches", nodes_path %>
+      &nbsp;|&nbsp;
+      <%= link_to "ARP Cache", arpcaches_path %>
+    </div>
+    <div id="content">
+      <div id="notice_message">
+        <%= flash[:notice] %>
+      </div>
+      <div id="error_message">
+        <%= flash[:error] %>
+      </div>
+      <%= yield %>
+    </div>
+  </div>
+
+</body>
+</html>

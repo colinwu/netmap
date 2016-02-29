@@ -1,0 +1,74 @@
+<h2>Jacks and Ports for <%= link_to @node.sysName, {:action => 'show_links', :id => @node}, :title => "Show links" -%></h2>
+
+<% session[:return_to] = request.env['QUERY_STRING'] -%>
+<% form_tag("/node/find_mac_address/#{@node.id}", :method => 'get') do -%>
+  <%= text_field_tag 'raw_mac', @mac_str, :class => 'small' -%>
+  <%= submit_tag 'Find MAC address in switch', :class => 'small' -%>
+<% end %>
+
+<%if session[:user_level] == 0 %>
+<div class='line_menu'>
+<%= link_to 'Add Port', {:controller => 'ports', :action => 'new'}, :class => 'menu_link' %>
+<% if @node.commStr != '**UNKNOWN**' -%>
+
+<%= link_to 'Detect/Refresh Ports', {:controller => 'ports', :action => 'detect', :id => @node.id}, :class => 'menu_link' %>
+
+<%= link_to 'Delete Non-existent ports', {:controller => 'ports', :action => 'delete_nonexistent', :id => @node.id}, :class => 'menu_link', :confirm => 'Are you sure?' %>
+<% end -%>
+</div>
+<% end %>
+
+<% if @node.ports.empty? -%>
+<h3>No Ports or Jacks defined</h3>
+<% else -%>
+  <table class="list">
+  <tr>
+    <TH>Port</TH>
+    <TH>Jack Label</TH>
+    <TH>Building</TH>
+    <TH>vlan</TH>
+    <TH>Comments</TH>
+    <% if session[:user_level] == 0 %>
+      <TH>Actions</TH>
+    <% end %>
+  </tr>
+<%
+for @port in @ports.to_a
+%>
+  <tr class="<%= cycle("light", "dark") -%>">
+  <TD><span style="vertical-align:middle">
+  <%
+  if session[:user_level] == 0 %>
+    <%= link_to( image_tag("#{@adminStatus[@port.id]}.png", :width => '18px'), {:controller => 'ports', :action => 'toggle_admin', :id => @port}, :confirm => "Are you sure?", :title => 'Click to toggle Admin Status') %>
+    <%
+  else %>
+    <%= image_tag("#{@adminStatus[@port.id]}.png", :title => "Admin Status", :width => '18px') %>
+    <%
+  end %>
+    <%= image_tag("#{@opStatus[@port.id]}.png", :title => "Op Status", :width => '18px') %></span><span style="vertical-align:middle">&nbsp;<%= @port.ifName %></span></TD>
+  <% if session[:user_level] == 0 %>
+  <TD><%= best_in_place @port, :label, :as => :input, :cols => 10 %></TD>
+  <TD><%= @port.building.nil? ? '-' : @port.building.long_name %></TD>
+  <TD><% if @port.vlan.nil? %>
+           -
+      <% elsif @port.vlan == 0 %>
+           trunk
+      <% else %>
+      <%= link_to(@port.vlan, {:controller => 'ports', :action => 'edit_vlan', :id => @port}) %>
+      <% end %>
+  </TD>
+  <TD><%= best_in_place @port, :comment, :as => :input %></TD>
+  <td>
+  <span class="line_menu"><%= link_to image_tag("info.jpg", :size => "14x15", :alt => 'Status'), {:controller => 'ports', :action => 'stats', :id => @port} %></span>
+  <span class="line_menu"><%= link_to image_tag("edit.png", :size => "14x14", :alt => 'Edit'), {:controller => 'ports', :action => 'edit', :id => @port} %></span>
+  <span class="line_menu"><%= link_to image_tag('editdelete.png', :size => '14x14', :alt => 'Del'), @port, method: :delete, data: {confirm: 'Are you sure?'} %></span></td>
+  <% else %>
+  <TD><%=h @port.label %></TD>
+  <TD><%=h @port.vlan %></TD>
+  <TD><%=h @port.building.nil? ? '-' : @port.building.long_name %></TD>
+  <TD><%=h @port.comment %></TD>
+  <% end %>
+  </tr>
+<%  end -%>
+<% end -%>
+</table>

@@ -1,0 +1,22 @@
+<!-- The next line is a kludge to work around a bug that prevents in-place editing from working inside a partial cf: http://www.paulwelty.com/ruby-on-rails/in_place_editor-with-a-collection-in-a-partial-in-ruby-on-rails/ -->
+<%- @port = list -%>
+
+<TR class=<%= cycle('light','dark') -%>>
+  <TD><%= show_ipef :port, 'label', {:cols => 10} %></TD>
+  <TD><%= list.node.sysName -%></TD>
+  <TD><span style="vertical-align:middle"><a href="/port/toggle_admin/<%= "#{list.id}" -%>" onclick="return confirm('Are you sure?');"><img src='/images/<%="#{@adminStatus[list.id]}.png"%>' title="Admin Status" width='18px'  /></a><img src='/images/<%="#{@opStatus[list.id]}.png"%>' title="Op Status" width='18px' /></span><span style="vertical-align:middle">&nbsp;<%= list.ifName -%></TD>
+  <TD><% if list.vlan.nil? %>
+  -
+  <% elsif list.vlan == 0 %>
+    trunk
+  <% else %>
+    <%= link_to(list.vlan, {:controller => 'port', :action => 'edit_vlan', :id => list}) %>
+  <% end %>
+  </TD>
+
+  <TD><%= show_ipef :port, 'comment' %></TD>
+  <TD><span class="line_menu"><%= link_to image_tag("info.jpg", :size => "14x15", :alt => 'Status'), {:controller => 'port', :action => 'stats', :id => list} %></span>
+  <span class='line_menu'><%= link_to image_tag('edit.png', :size => "14x14", :alt => 'Edit'), :controller => 'port', :action => 'edit', :id => list %></span>
+  <span class='line_menu'><%= link_to image_tag('editdelete.png', :size => '14x14', :alt => 'Del'), {:controller => 'port', :action => 'destroy', :id => list}, :confirm => "Are you sure?" %></span></TD>
+
+</TR>

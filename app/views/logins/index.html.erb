@@ -1,0 +1,311 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <title>McMaster Network Database</title>
+    <style type="text/css" media="screen">
+      body {
+        margin: 0;
+        margin-bottom: 25px;
+        padding: 0;
+        background-color: #f0f0f0;
+        font-family: "Lucida Grande", "Bitstream Vera Sans", "Verdana";
+        font-size: 12px;
+        color: #333;
+      }
+
+      h1 {
+        font-size: 28px;
+        color: #000;
+      }
+
+      a  {color: #03c}
+      a:hover {
+        background-color: #03c;
+        color: white;
+        text-decoration: none;
+      }
+
+
+      #page {
+        background-color: #f0f0f0;
+        width: 750px;
+        margin: 0;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      #content {
+        float: left;
+        background-color: white;
+        border: 3px solid #aaa;
+        border-top: none;
+        padding: 25px;
+        width: 500px;
+      }
+
+      #sidebar {
+        float: right;
+        width: 175px;
+      }
+
+      #footer {
+        clear: both;
+      }
+
+
+      #header, #about, #getting-started {
+        padding-left: 75px;
+        padding-right: 30px;
+      }
+
+
+      #header {
+        background-image: url("images/rails.png");
+        background-repeat: no-repeat;
+        background-position: top left;
+        height: 64px;
+      }
+      #header h1, #header h2 {margin: 0}
+      #header h2 {
+        color: #888;
+        font-weight: normal;
+        font-size: 16px;
+      }
+
+
+      #about h3 {
+        margin: 0;
+        margin-bottom: 10px;
+        font-size: 14px;
+      }
+
+      #about-content {
+        background-color: #ffd;
+        border: 1px solid #fc0;
+        margin-left: -11px;
+      }
+      #about-content table {
+        margin-top: 10px;
+        margin-bottom: 10px;
+        font-size: 11px;
+        border-collapse: collapse;
+      }
+      #about-content td {
+        padding: 10px;
+        padding-top: 3px;
+        padding-bottom: 3px;
+      }
+      #about-content td.name  {color: #555}
+      #about-content td.value {color: #000}
+
+      #about-content.failure {
+        background-color: #fcc;
+        border: 1px solid #f00;
+      }
+      #about-content.failure p {
+        margin: 0;
+        padding: 10px;
+      }
+
+
+      #getting-started {
+        border-top: 1px solid #ccc;
+        margin-top: 25px;
+        padding-top: 15px;
+      }
+      #getting-started h1 {
+        margin: 0;
+        font-size: 20px;
+      }
+      #getting-started h2 {
+        margin: 0;
+        font-size: 14px;
+        font-weight: normal;
+        color: #333;
+        margin-bottom: 25px;
+      }
+      #getting-started ol {
+        margin-left: 0;
+        padding-left: 0;
+      }
+      #getting-started li {
+        font-size: 14px;
+        color: #888;
+        margin-bottom: 15px;
+      }
+      #getting-started li h2 {
+        margin: 0;
+        font-weight: normal;
+        font-size: 14px;
+        color: #333;
+      }
+      #getting-started li p {
+        color: #555;
+        font-size: 12px;
+        margin:0;
+      }
+
+
+      #search {
+        margin: 0;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        font-size: 11px;
+      }
+      #search input {
+        font-size: 11px;
+        margin: 2px;
+      }
+      #search-text {width: 170px}
+
+
+      #sidebar ul {
+        margin-left: 0;
+        padding-left: 0;
+      }
+      #sidebar ul h3 {
+        margin-top: 25px;
+        font-size: 16px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #ccc;
+      }
+      #sidebar li {
+        list-style-type: none;
+        padding-bottom: 5px;
+      }
+      #sidebar ul.links li {
+        margin-bottom: 5px;
+      }
+
+    </style>
+    <script type="text/javascript" src="javascripts/prototype.js"></script>
+    <script type="text/javascript" src="javascripts/effects.js"></script>
+    <script type="text/javascript">
+      function about() {
+        if (Element.empty('about-content')) {
+          new Ajax.Updater('about-content', 'rails/info/properties', {
+            method:     'get',
+            onFailure:  function() {Element.classNames('about-content').add('failure')},
+            onComplete: function() {new Effect.BlindDown('about-content', {duration: 0.25})}
+          });
+        } else {
+          new Effect[Element.visible('about-content') ?
+            'BlindUp' : 'BlindDown']('about-content', {duration: 0.25});
+        }
+      }
+
+      window.onload = function() {
+        $('search-text').value = '';
+        $('search').onsubmit = function() {
+          $('search-text').value = 'site:rubyonrails.org ' + $F('search-text');
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <div id="page">
+      <div id="sidebar">
+        <ul id="sidebar-items">
+          <li>
+          <% unless session[:user_id].nil? %>
+          <h3>Logged in as: <%= User.find(session[:user_id]).name %></h3>
+          <ul>
+          <LI><%= link_to "logout", logout_logins_path %></LI>
+          <li><%= link_to "change password", "logins/edit_user/#{session[:user_id]}" %></li>
+          </ul>
+          <% else %>
+            <h3>Login</h3>
+            <%= form_tag login_logins_path, method: :post %>
+              <label for="name">Name:</label>
+              <input id="name" type="text" name="name" />
+              <label for="password">Password:</label>
+              <input id="password" type="password" name="password" />
+              <input type="submit" name="commit" value="Login" />
+            </form>
+          <% end %>
+          </li>
+
+          <li>
+            <h3>Site News</h3>
+            <ul>
+            <li><b>Feb 27, 2016</b>:
+            <ul>
+            <LI style="list-style-type: circle; margin-left:1em">First release after conversion to Ruby-on-Rails 4.2.5</LI>
+            </ul></li>
+            </ul>
+          </ul>
+      </div>
+
+      <div id="content">
+        <div id="header">
+          <h1>McMaster Network Database</h1>
+          <h2>You&rsquo;re riding the Rails!</h2>
+        </div>
+<!--
+        <div id="about">
+          <h3><a href="rails/info/properties" onclick="about(); return false">About your application&rsquo;s environment</a></h3>
+          <div id="about-content" style="display: none"></div>
+        </div>
+-->
+        <div id="getting-started">
+<h1>Browse and Manage...</h1>
+          <ul>
+            <li>
+              <a href="/buildings">Buildings</a> Table
+            </li>
+
+            <li>
+              <a href="/nodes">Switches and Routers</a> Table
+            </li>
+
+            <li>
+              <a href="/arpcaches">ARP</a> history
+            </li>
+            <li>
+              Find IP addresses for <a href="/recycles">recycling</a>
+            </li>
+          </ul>
+<hr />
+<h1>Find using...</h1>
+          <ul>
+            <li>
+              <a href="/searchs/by_building">Building and Jack label</a>
+              <p>Show switches and ports</p>
+            </li>
+
+            <li>
+              <a href="/searchs/by_switch">Switch and port</a>
+              <p>Show buildings and jack labels</p>
+            </li>
+
+            <li>
+              <a href="/searchs/by_vlan">Vlan</a>
+              <p>Find all ports in a vlan</p>
+            </li>
+
+            <li>
+              <a href="/searchs/platform">Platform substring</a>
+              <p>Specify a string: e.g. "2924", "3548 XL", etc.</p>
+            </li>
+          </ul>
+        <% if session[:user_level] == 0 %>
+          <hr />
+          <h1>Manage Users</h1>
+          <ul>
+            <li>
+              <a href="/logins/list_users">List and edit users</a>
+            </li>
+            <li>
+              <a href="/logins/add_user">Add user</a>
+            </li>
+        <% end %>
+        </div>
+      </div>
+
+      <div id="footer">&nbsp;</div>
+    </div>
+  </body>
+</html>

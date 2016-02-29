@@ -1,0 +1,21 @@
+<h1><%= @title -%></h1>
+<% if @nodes.size.zero? %>
+  No switches in this building.
+<% else %>
+  <% session[:return_to] = request.request_uri -%>
+  <table class="list">
+  <TR><TH>sysName</TH><TH>IP Address</TH><TH>Type</TH><TH>Capability</TH>
+
+  <% if session[:user_level] == 0 %>
+    <TH>Community String</TH><TH colspan = 3>Actions</TH></TR>
+  <% else %>
+    <TH>Show</TH></TR>
+  <% end %>
+    <% if session[:user_level] == 0 %>
+      <%= render :partial => 'node/list', :collection => @nodes %>
+    <% else %>
+      <%= render :partial => 'node/list_unprivileged', :collection => @nodes %>
+    <% end %>
+
+  </table>
+<% end %>

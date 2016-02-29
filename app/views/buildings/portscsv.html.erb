@@ -1,0 +1,10 @@
+<% uri = request.request_uri.sub(/portscsv/, 'show_ports') -%>
+<a href="<%= uri -%>">Return to table view</a><br />
+<h2><%= @title -%></h2>
+Switch,Port,Label,Vlan,Comment<br />
+<% @ports.each do |ports| -%>
+  <% ports.each do |p| -%>
+    <%=h p.node.sysName -%>,<%=h p.ifName -%>,<%=h p.label -%>,<%=h p.vlan -%>,<%=h p.comment -%><br />
+  <% end %>
+<% end %>
+

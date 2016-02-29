@@ -1,0 +1,7 @@
+<tr class="<%= cycle("light", "dark") -%>">
+<TD><%= list_unprivileged.sysName %></TD>
+<td><%= list_unprivileged.ip %></td>
+<td><%= list_unprivileged.platform %></td>
+  <td><span class="line_menu">
+  <%= link_to 'Links', :controller => 'nodes', :action => 'show_links', :id => list_unprivileged -%>|<%= link_to 'Jacks', :controller => 'node', :action => 'show_jacks', :id => list_unprivileged -%></span></td>
+</tr>

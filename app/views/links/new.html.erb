@@ -1,0 +1,25 @@
+<h1>Add Link</h1>
+<%= error_messages_for 'link' %>
+
+<% form_tag :action => 'create' do %>
+  <fieldset>
+  <div class="row">
+    <!--[form:port]-->
+    <div class="form-element">
+      <label for="link_node_a">Device A</label>
+      <%= select 'nodeA', 'id', @a %>
+      <label for="link_port_a">Port</label>
+      <%= text_field 'nodeA', 'ifName' %>
+    </div>
+    <div class="form-element">
+    <label for="link_node_b">Device B</label>
+      <%= select 'nodeB', 'id', Node.find(:all, :order => 'sysName').collect {|n| [n.sysName, n.id]} %>
+      <label for="link_port_b">Port</label>
+      <%= text_field 'nodeB', 'ifName' %>
+    </div>
+<!--[eoform:port]-->
+
+  </div>
+</fieldset>
+  <%= submit_tag 'Update' %>
+<% end %>

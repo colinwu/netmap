@@ -1,0 +1,28 @@
+<h1><%= @title -%></h1>
+
+<% if @port.nil? %>
+  Search returned no results
+  <% else %>
+    <h3><%= @search_string -%></h3>
+  <% session[:return_to] = request.request_uri -%>
+<table class="list">
+<TR>
+  <TH>Jack Label</TH>
+  <TH>Device</TH>
+  <TH>Port</TH>
+  <TH>Vlan</TH>
+  <TH>Comment</TH>
+  <% if session[:user_level] == 0 %>
+  <TH>Action</TH>
+  <% end %>
+</TR>
+
+<% if session[:user_level] == 0 %>
+  <%= render :partial => 'list', :collection => @port %>
+<% else %>
+  <%= render :partial => 'unpriv_list', :collection => @port %>
+<% end %>
+
+</table>
+
+<% end %>

@@ -1,0 +1,60 @@
+<h2><%= @title -%></h2>
+<%
+uri = request.request_uri.sub(/[&?]order=[^&]+/,'')
+paginate_uri = uri.sub(/\/nopage/,'')
+if (uri =~ /\?/)
+  uri += '&'
+else
+  uri += '?'
+end
+session[:return_to] = request.request_uri
+%>
+Return to <a href="<%= paginate_uri %>">paginated display</a><p>
+Click on column title to sort the results by that column or...
+
+<div>
+<table class="list">
+<tr>
+  <TD class=small>Find IP addresses that start with
+    <% form_tag(uri, :method => 'get') do %>
+    <%= text_field_tag 'ip', @s_ip, :size => 16 %><br>
+    <%= submit_tag 'Find' %><br>
+
+    <% end %>
+  </TD>
+  <TD class=small>Find MAC addresses that contain
+    <% form_tag(uri, :method => 'get') do %>
+    <%= text_field_tag 'mac', @s_mac, :size => 16 %><br>
+    <%= submit_tag 'Find' %>
+    <% end %>
+  </TD>
+  <TD class=small>Find routers that start with
+    <% form_tag(uri, :method => 'get') do %>
+    <%= text_field_tag 'router', @s_router, :size => 16 %><br>
+    <%= submit_tag 'Find' %>
+    <% end %>
+  </TD>
+  <TD></TD>
+  <TD></TD>
+  <TD></TD>
+</tr>
+
+<tr>
+<TH><a href="<%= uri+'order=bin_ip' -%>">IP Address</a></TH>
+<TH><a href="<%= uri+'order=mac' -%>">MAC addr</a></TH>
+<TH><a href="<%= uri+'order=router' -%>">Router</a></TH>
+<TH>Int</TH>
+<TH><a href="<%= uri+'order=updated_on' -%>">Last seen</a></TH>
+<TH></TH></tr>
+<% @arplist.each do |b| %>
+<tr class="<%= cycle("light", "dark") -%>">
+  <TD><%= b.ip %></TD>
+  <td><%= b.mac %></td>
+  <td><%= b.router %></td>
+  <td><%= b.if %></td>
+  <td><%= b.updated_on.strftime('%d-%b-%Y') %></td>
+  <td><%= link_to 'Del', {:action => 'destroy', :id => b}, :confirm => "Are you sure?" %></span></td>
+  </tr>
+<% end %>
+</table>
+</div>

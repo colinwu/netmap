@@ -1,0 +1,12 @@
+  <p>
+    <label for="user_name">Name:</label>
+    <%= text_field :user, :name, {:size => 40, :readonly => true} %>
+  </p>
+  <p>
+    <label for="user_password">Password:</label>
+    <%= password_field :user, :password, :size => 40 %>
+  </p>
+  <p>
+    <label for="user_password_confirmation">Confirm:</label>
+    <%= password_field :user, :password_confirmation, :size => 40 %>
+  </p>

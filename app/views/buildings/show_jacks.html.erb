@@ -1,0 +1,33 @@
+<h1><%= @title -%></h1>
+<%
+uri = request.request_uri.sub(/[&?]order=[^&]+/,'')
+exporturi = request.request_uri.sub(/show_jacks/, 'jackscsv')
+if (uri =~ /\?/)
+  uri += '&'
+else
+  uri += '?'
+end
+session[:return_to] = request.request_uri
+-%>
+<a href="<%= exporturi -%>">Export as CSV</a>
+<table class="list">
+<TR>
+<TH><a href="<%= uri+'order=label' -%>">Jack Label</a></TH>
+<TH><a href="<%= uri+'order=node_id,ifIndex' -%>">Switch</a></TH>
+<TH>Port</TH>
+<TH>Vlan</TH>
+<TH>Comment</TH>
+<TH>Actions</TH>
+</TR>
+
+<% @jacks.each do |j| -%>
+<TR class="<%= cycle('light','dark') -%>">
+<TD><%= j.label -%></TD>
+<TD><%= j.node.sysName -%></TD>
+<TD><%= j.ifName -%></TD>
+<TD><%= j.vlan -%></TD>
+<TD><%= j.comment -%></TD>
+<TD><span class='line_menu'>
+      <%= link_to 'Edit', :controller => 'port', :action => 'edit', :id => j %>&nbsp;|&nbsp;
+      <%= link_to 'Del', {:controller => 'port', :action => 'destroy', :id => j}, :confirm => "Are you sure?" %></span></TD></TR>
+<% end %>

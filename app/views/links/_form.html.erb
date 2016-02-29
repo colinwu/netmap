@@ -1,0 +1,19 @@
+<fieldset>
+	<div class="row">
+		<!--[form:port]-->
+    <div class="form-element">
+      <label for="link_node_a">Device A</label>
+      <% @node_list = Node.find(:all, :order => 'sysName').collect {|a| [ a.sysName, a.id ]} -%>
+      <%= select_tag (:nodeA, options_for_select (@node_list,@link.port_a.node.id)) %>
+      <label for="link_port_a">Port</label>
+      <%= text_field_tag 'port_a', @link.port_a.ifName %>
+      <br>
+      <label for="link_port_b">Device B</label>
+      <%= select_tag (:nodeB, options_for_select (@node_list,@link.port_b.node.id)) %>
+      <label for="link_port_b">Port</label>
+      <%= text_field_tag 'port_b', @link.port_b.ifName %>
+    </div>
+<!--[eoform:port]-->
+
+	</div>
+</fieldset>
