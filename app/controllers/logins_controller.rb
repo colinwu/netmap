@@ -43,7 +43,7 @@ class LoginsController < ApplicationController
   end
 
   def add_user
-    @user = User.new(params[:user])
+    @user = User.new(user_params)
     if request.post? and @user.save
       flash[:notice] = "User #{@user.name} created"
       # @user = User.new
@@ -64,7 +64,7 @@ class LoginsController < ApplicationController
       params[:user].delete(:password)
       params[:user].delete(:password_confirmation)
     end
-    if @user.update_attributes(params[:user])
+    if @user.update_attributes(user_params)
       me = User.find(session[:user_id])
       logger.info(Time.now.to_s + ": #{@user.name} updated by #{me[:name]}")
       flash[:notice] = "User #{@user.name} updated"
@@ -91,5 +91,11 @@ class LoginsController < ApplicationController
 
   def list_users
     @all_users = User.all.order(:name)
+  end
+  
+  private
+  
+  def user_params
+    params.require(:user).permit(:name, :password, :password_confirmation, :level)
   end
 end

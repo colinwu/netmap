@@ -36,11 +36,24 @@ Rails.application.routes.draw do
       get 'toggle_admin'
       get 'stats'
       get 'edit_vlan'
+      post 'update_vlan'
     end
   end
   
   resources :recycles
-  resources :searches
+  
+  resources :searches do
+    collection do
+      get 'by_building'
+      get 'find_by_building'
+      get 'by_switch'
+      get 'find_by_switch'
+      get 'by_vlan'
+      get 'find_by_vlan'
+      get 'platform'
+      get 'find_by_platform'
+    end
+  end
   
   resources :logins do
     member do
@@ -51,8 +64,8 @@ Rails.application.routes.draw do
       post 'login'
       get 'logout'
       get 'no_priv'
-      get 'add_user'
       get 'list_users'
+      post 'add_user'
     end
   end
   

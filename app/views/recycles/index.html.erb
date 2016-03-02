@@ -1,13 +1,8 @@
 <h1><%= @title -%></h1>
 <%
-uri = request.request_uri.sub(/[&?]order=[^&]+/,'')
-nopage_uri = uri.sub(/^\/recycle/,'/recycle/nopage')
-if (uri =~ /\?/)
-  uri += '&'
-else
-  uri += '?'
-end
-session[:return_to] = request.request_uri
+uri = request.env['QUERY_STRING'].sub(/order=[^&]*&*/,'')
+# nopage_uri = uri.sub(/^\/recycle/,'/recycle/nopage')
+session[:return_to] = request.env['ORIGINAL_FULLPATH']
 %>
 <div style="background-color: #ffff88; padding:10">
 <h3>Caution</h3>
@@ -22,17 +17,17 @@ This output should not be taken as the final authority for recycling IP addresse
 <table class="list">
 <tr>
 <TD class=small colspan="4">Subnet (/24) to check (e.g. 130.113.69)
-  <% form_tag(uri, :method => 'get') do %>
+  <%= form_tag(recycles_path, :method => 'get') do %>
     <%= text_field_tag 'net', @s_net, :size => 16 %>
     <%= submit_tag 'Find' %>
   <% end %>
 </TD>
 </tr>
 <tr>
-<TH><a href="<%= uri+'order=bin_ip' -%>">IP Address</a></TH>
-<TH><a href="<%= uri+'order=mac' -%>">MAC</a></TH>
-<TH><a href="<%= uri+'order=name' -%>">Hostname</a></TH>
-<TH><a href="<%= uri+'order=updated_on' -%>">Last Seen</a></TH>
+<TH><a href="<%= request.env['ORIGINAL_FULLPATH']+uri+'order=bin_ip' -%>">IP Address</a></TH>
+<TH><a href="<%= request.env['ORIGINAL_FULLPATH']+uri+'order=mac' -%>">MAC</a></TH>
+<TH><a href="<%= request.env['ORIGINAL_FULLPATH']+uri+'order=name' -%>">Hostname</a></TH>
+<TH><a href="<%= request.env['ORIGINAL_FULLPATH']+uri+'order=updated_on' -%>">Last Seen</a></TH>
 </tr>
 
 <% @candidates.each do |row| %>
@@ -45,4 +40,4 @@ This output should not be taken as the final authority for recycling IP addresse
 <% end %>
 </table>
 
-<%
+<%= will

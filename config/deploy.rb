@@ -1,6 +1,5 @@
 # config valid only for current version of Capistrano
 lock '3.4.0'
-lock '3.4.0'
 set :application, 'netmap'
 set :repo_url, 'https://colinwu@github.com/colinwu/netmap.git'
 set :git_enable_submodules, 1

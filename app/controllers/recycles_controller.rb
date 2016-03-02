@@ -22,9 +22,9 @@ class RecyclesController < ApplicationController
         if not h.nil?
           @numUsed = @numUsed + 1
           hostnames << h
-          recent = Arpcache.find :first, :conditions => "updated_on > date_sub(now(), INTERVAL 1 YEAR) and ip = '#{ip}'"
+          recent = Arpcache.where("updated_on > date_sub(now(), INTERVAL 1 YEAR) and ip = ?", ip).first
           if recent.nil? #not been seen in the past year
-            candidate = Arpcache.find :first, :conditions => "updated_on < date_sub(now(), INTERVAL 1 YEAR) and ip = '#{ip}'", :order => 'updated_on'
+            candidate = Arpcache.where("updated_on < date_sub(now(), INTERVAL 1 YEAR) and ip = ?",ip).order('updated_on').first
             if candidate.nil?  # not in arpcache table
               temp[:ip] = ip
               temp[:mac] = "N/A"

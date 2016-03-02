@@ -33,7 +33,7 @@ class ApplicationController < ActionController::Base
 
   def authenticate
     unless User.find_by_id(session[:user_id])
-      session[:return_to] = request.env['QUERY_STRING']
+      session[:return_to] = request.env['ORIGINAL_FULLPATH']
       redirect_to logins_path
     end
   end

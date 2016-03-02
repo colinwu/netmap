@@ -4,7 +4,7 @@
   Search returned no results
   <% else %>
     <h3><%= @search_string -%></h3>
-  <% session[:return_to] = request.request_uri -%>
+  <% session[:return_to] = request.env['ORIGINAL_FULLPATH'] -%>
 <table class="list">
 <TR>
   <TH>Jack Label</TH>

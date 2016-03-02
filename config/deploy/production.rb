@@ -6,12 +6,12 @@
 # server 'example.com', user: 'deploy', roles: %w{app db web}, my_property: :my_value
 # server 'example.com', user: 'deploy', roles: %w{app web}, other_property: :other_value
 # server 'db.example.com', user: 'deploy', roles: %w{db}
-set :deploy_to, "/home/sharpalert/RubyTest"
+set :deploy_to, "/var/www/netmap"
 
 server 'fhsnetmap.mcmaster.ca', user: 'netmap', roles: %w{app db web}, 
     ssh_options: {
-      user: 'sharpalert', # overrides user setting above
-      port: 22132
+      user: 'netmap', # overrides user setting above
+      port: 22132,
       keys: %w(/home/wucolin/.ssh/id_rsa),
       forward_agent: false,
       auth_methods: %w(publickey)

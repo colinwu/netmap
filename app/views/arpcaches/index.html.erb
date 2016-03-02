@@ -1,13 +1,13 @@
 <h2><%= @title -%></h2>
 <%
-uri = request.env['QUERY_STRING'].sub(/[&?]order=[^&]+/,'')
+uri = request.env['QUERY_STRING'].sub(/order=[^&]*&*/,'')
 nopage_uri = uri.sub(/^\/arpcache/,'/arpcache/nopage')
 if (uri =~ /\?/)
   uri += '&'
 else
   uri += '?'
 end
-session[:return_to] = request.env['QUERY_STRING']
+session[:return_to] = request.env['ORIGINAL_FULLPATH']
 %>
 
 For faster response the results are displayed 25 records per page.

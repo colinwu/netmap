@@ -6,7 +6,7 @@
 <%= flash[:error] -%>
 </div>
 
-<% form_tag 'find_by_vlan', :method => :get do %>
+<%= form_tag find_by_vlan_searches_path, :method => :get do %>
 <fieldset>
 <div class='row'>
   <div class='field-element'>

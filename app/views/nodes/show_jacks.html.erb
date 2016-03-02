@@ -1,6 +1,6 @@
 <h2>Jacks and Ports for <%= link_to @node.sysName, {:action => 'show_links', :id => @node}, :title => "Show links" -%></h2>
 
-<% session[:return_to] = request.env['QUERY_STRING'] -%>
+<% session[:return_to] = request.env['ORIGINAL_FULLPATH'] -%>
 <% form_tag("/node/find_mac_address/#{@node.id}", :method => 'get') do -%>
   <%= text_field_tag 'raw_mac', @mac_str, :class => 'small' -%>
   <%= submit_tag 'Find MAC address in switch', :class => 'small' -%>

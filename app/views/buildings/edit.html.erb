@@ -2,7 +2,7 @@
 <fieldset>
 <legend>Editing <%= @building.long_name %></legend>
 <% form_tag :action => 'update', :id => @building do %>
-  <%= render :partial => 'form' %>
+  <%= render 'form' %>
   <%= submit_tag 'Update' %>
 <% end %>
 </fieldset>

@@ -6,7 +6,7 @@
 <%= flash[:error] -%>
 </div>
 
-<% form_tag :action => 'find_by_platform' do %>
+<%= form_tag find_by_platform_searches_path, method: :get do %>
 <fieldset>
 <div class='row'>
   <div class='field-element'>

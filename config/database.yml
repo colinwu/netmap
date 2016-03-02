@@ -32,9 +32,10 @@ test:
 production:
   adapter: mysql2
   database: netmap_production
-  username: netmap
-  password: nutbar
-  host: netmap.mcmaster.ca
+  username: root
+  password: 
+  host: localhost
+  socket: /var/lib/mysql/mysql.sock
 
 #event:
   #adapter: mysql2

@@ -1,7 +1,6 @@
 <h1>Reconfigure port <%=h @port.node.sysName -%>:<%=h @port.ifName -%></h1>
-<%= error_messages_for 'port' %>
 
-<% form_tag :action => 'update_vlan', :id => @port do %>
+<%= form_tag :action => 'update_vlan', :id => @port do %>
 
 <fieldset>
 <div class="row">
