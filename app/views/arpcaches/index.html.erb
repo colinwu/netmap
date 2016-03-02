@@ -58,7 +58,7 @@ If you don't mind waiting you may display the full results on one page by clicki
   <td><%= b.mac %></td>
   <td><%= b.router %></td>
   <td><%= b.if %></td>
-  <td><%= b.updated_on.strftime('%d-%b-%Y') %></td>
+  <td><%= b.updated_at.strftime('%d-%b-%Y') %></td>
   <td><%= link_to 'Del', b, method: :delete, data: {confirm: "Are you sure?"} %></span></td>
   </tr>
 <% end %>
