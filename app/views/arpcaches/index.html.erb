@@ -46,11 +46,11 @@ If you don't mind waiting you may display the full results on one page by clicki
 </tr>
 
 <tr>
-<TH><a href="<%= uri+'order=bin_ip' -%>">IP Address</a></TH>
-<TH><a href="<%= uri+'order=mac' -%>">MAC addr</a></TH>
-<TH><a href="<%= uri+'order=router,bin_ip' -%>">Router</a></TH>
+<TH>IP Address</TH>
+<TH>MAC addr</TH>
+<TH>Router</TH>
 <TH>Int</TH>
-<TH><a href="<%= uri+'order=updated_on' -%>">Last seen</a></TH>
+<TH>Last seen</TH>
 <TH></TH></tr>
 <% @arplist.each do |b| %>
 <tr class=<%= cycle("light", "dark") -%>>

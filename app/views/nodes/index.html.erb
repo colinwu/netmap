@@ -39,12 +39,12 @@ Find by device name
   <% end %>
 </tr>
 <tr>
-<TH><a href="<%= request.env['REQUEST_PATH']+'?'+uri+'&order=sysname' -%>">sysName</a></TH>
-<TH><a href="<%= request.env['REQUEST_PATH']+'?'+uri+'&order=bin_ip' -%>">IP Address</a></TH>
-<TH><a href="<%= request.env['REQUEST_PATH']+'?'+uri+'&order=platform' -%>">Type</a></TH>
-<TH><a href="<%= request.env['REQUEST_PATH']+'?'+uri+'&order=capability' -%>">Capability</a></TH>
+<TH>sysName</TH>
+<TH>IP Address</TH>
+<TH>Type</TH>
+<TH>Capability</TH>
 <% if session[:user_level] === 0 %>
-<TH><a href="<%= uri+'order=commStr' -%>">SNMP pw</a></TH>
+<TH>SNMP pw</TH>
 <TH colspan=3>Actions</TH>
 <% else %>
   <th>Show</th>
