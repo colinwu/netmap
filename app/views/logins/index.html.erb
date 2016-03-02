@@ -214,7 +214,7 @@
           <h3>Logged in as: <%= User.find(session[:user_id]).name %></h3>
           <ul>
           <LI><%= link_to "logout", logout_logins_path %></LI>
-          <li><%= link_to "change password", "logins/edit_user/#{session[:user_id]}" %></li>
+          <li><%= link_to "change password", edit_user_login_path(session[:user_id]) %></li>
           </ul>
           <% else %>
             <h3>Login</h3>
