@@ -11,14 +11,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160229181724) do
+ActiveRecord::Schema.define(version: 20160302213233) do
 
   create_table "arpcaches", force: :cascade do |t|
     t.string   "ip",         limit: 255, default: "-", null: false
     t.string   "mac",        limit: 255, default: "-", null: false
     t.string   "router",     limit: 255, default: "-", null: false
     t.string   "if",         limit: 255, default: "-", null: false
-    t.datetime "updated_on"
+    t.datetime "updated_at"
+    t.datetime "created_at"
   end
 
   create_table "buildings", force: :cascade do |t|
@@ -41,7 +42,8 @@ ActiveRecord::Schema.define(version: 20160229181724) do
   create_table "links", force: :cascade do |t|
     t.integer  "port_a_id",  limit: 4
     t.integer  "port_b_id",  limit: 4
-    t.datetime "updated_on"
+    t.datetime "updated_at"
+    t.datetime "created_at"
   end
 
   create_table "nodes", force: :cascade do |t|
@@ -50,8 +52,9 @@ ActiveRecord::Schema.define(version: 20160229181724) do
     t.string   "commStr",    limit: 255, default: "**UNKNOWN**", null: false
     t.string   "platform",   limit: 255, default: "-",           null: false
     t.integer  "capability", limit: 4,   default: 0,             null: false
-    t.datetime "updated_on"
+    t.datetime "updated_at"
     t.string   "writeStr",   limit: 255
+    t.datetime "created_at"
   end
 
   create_table "ports", force: :cascade do |t|
@@ -61,8 +64,9 @@ ActiveRecord::Schema.define(version: 20160229181724) do
     t.integer  "vlan",        limit: 4,   default: 0,   null: false
     t.string   "label",       limit: 255, default: "-", null: false
     t.string   "comment",     limit: 255, default: "-", null: false
-    t.datetime "updated_on"
+    t.datetime "updated_at"
     t.integer  "ifIndex",     limit: 4
+    t.datetime "created_at"
   end
 
   create_table "sessions", force: :cascade do |t|
