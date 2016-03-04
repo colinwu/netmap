@@ -4,18 +4,14 @@ else
   logfile = File.open('log/netmap-dev.log', File::WRONLY | File::APPEND | File::CREAT)
   log = Logger.new(logfile)
 end
-log.formatter = proc {|severity, datetime, progmane, msg| Time.now.to_s + ": #{msg}\n" }
+log.formatter = proc {|severity, datetime, progname, msg| Time.now.to_s + ": #{msg}\n" }
 
 require 'snmp'
-$mib = SNMP::MIB.new
-module_list = Dir::entries('/usr/share/ruby/snmp/mibs').collect! { |file|
-next unless file =~ /\.yaml$/; File::basename(file,'.yaml') }.compact!
+::ApplicationController
 
-module_list.each do |m|
-  $mib.load_module(m)
-end
+puts $module_list
 
-Node.all( :conditions => 'commStr <> "**UNKNOWN**"').each do |devA|
+Node.where('commStr <> "**UNKNOWN**"').each do |devA|
   remoteIP = Hash.new
   remotePort = Hash.new
   localPort = Hash.new
@@ -23,14 +19,16 @@ Node.all( :conditions => 'commStr <> "**UNKNOWN**"').each do |devA|
   idList = Array.new
   pwlist = ['mac-snmp', 'fhsr22439', 'public', '**UNKNWON**']
 
+  puts devA.ip
+  
   # Retrieve neighbours' IP addresses
   response = devA.snmpwalk('cdpCacheAddress')
   if response.nil?
     log.info("No result from #{devA.sysName} for 'cdpCacheAddress'")
+    next
   else
     response.each do |key,val|
-      oid = $mib.oid('cdpCacheAddress').to_s
-      /#{oid}\.(.+)/.match(key)
+      /cdpCacheAddress\.(.+)/.match(key)
       id = $1
       ip = SNMP::IpAddress.new(val.to_s)
       remoteIP[id] = ip.to_s
@@ -43,8 +41,7 @@ Node.all( :conditions => 'commStr <> "**UNKNOWN**"').each do |devA|
     log.info("No result from #{devA.sysName} for 'cdpCacheDevicePort'")
   else
     response.each do |key,val|
-      oid = $mib.oid('cdpCacheDevicePort').to_s
-      /#{oid}\.(.+)/.match(key)
+      /cdpCacheDevicePort\.(.+)/.match(key)
       id= $1
       if val =~ /^FastEthernet/
         val.sub!(/stEthernet/,'')
@@ -107,7 +104,7 @@ Node.all( :conditions => 'commStr <> "**UNKNOWN**"').each do |devA|
     end
 
     # See if the port is already in the database
-    portB = Port.find(:first, :conditions => "node_id = '#{devB.id}' and ifName = '#{remotePort[id]}'")
+    portB = Port.where("node_id = '#{devB.id}' and ifName = '#{remotePort[id]}'").first
     if portB.nil?
       portB = Port.create(:ifName => remotePort[id], :node_id => devB.id)
       log.info("Port #{devB.sysName} #{remotePort[id]} has been added to the database.")
@@ -117,7 +114,7 @@ Node.all( :conditions => 'commStr <> "**UNKNOWN**"').each do |devA|
     portB.save
 
     #create the link record if it doesn't exist already
-    portA = Port.find(:first, :conditions => "node_id = '#{devA.id}' and ifName = '#{localPort[id]}'")
+    portA = Port.where("node_id = '#{devA.id}' and ifName = '#{localPort[id]}'").first
     if portA.nil?
       portA = Port.create(:ifName => localPort[id], :node_id => devA.id)
       log.info("Port #{devA.sysName} #{portA.ifName} has been added to the database.")
@@ -126,11 +123,11 @@ Node.all( :conditions => 'commStr <> "**UNKNOWN**"').each do |devA|
     portA.label = '-'
     portA.save
 
-    link = Link.find(:first, :conditions => "port_a_id = '#{portA.id}' and port_b_id = '#{portB.id}'")
+    link = Link.where("port_a_id = '#{portA.id}' and port_b_id = '#{portB.id}'").first
     if link.nil?
       Link.create(:port_a_id => portA.id, :port_b_id => portB.id)
     end
-    link = Link.find(:first, :conditions => "port_a_id = '#{portB.id}' and port_b_id = '#{portA.id}'")
+    link = Link.where("port_a_id = '#{portB.id}' and port_b_id = '#{portA.id}'").first
     if link.nil?
       Link.create(:port_a_id => portB.id, :port_b_id => portA.id)
     end

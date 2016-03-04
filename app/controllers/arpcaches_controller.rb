@@ -22,7 +22,7 @@ class ArpcachesController < ApplicationController
         where = "ip like '#{@s_ip}%'"
       end
     end
-    @arplist = Arpcache.where(where).select('*,INET_ATON(ip) AS bin_ip').order((params[:order].nil? || params[:order] =~ /^bin_ip/i) ? 'bin_ip' : params[:order]).paginate(:page => params[:page])
+    @arplist = Arpcache.where(where).select('*,INET_ATON(ip) AS bin_ip').order((params[:order].nil? || params[:order] =~ /^bin_ip/i) ? 'updated_at DESC,bin_ip' : params[:order]).paginate(:page => params[:page])
   end
 
   def nopage

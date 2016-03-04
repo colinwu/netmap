@@ -7,11 +7,10 @@ Node.where("(capability & 1) = 1 and commStr <> '**UNKNOWN**'").each do |n|
   new = 0
   old = 0
   router = n.sysName
-  puts(router)
 
   arplist = n.snmpwalk("ipNetToMediaPhysAddress")
   arplist.each do |key,val|
-    m = /\.(\d+)\.(130\.113\.\d{1,3}\.\d{1,3})$/.match(key)
+    m = /\.(\d+)\.(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})$/.match(key)
     if !m.nil?
       ifIndex = m[1]
       ip = m[2]
@@ -33,7 +32,7 @@ Node.where("(capability & 1) = 1 and commStr <> '**UNKNOWN**'").each do |n|
         a.mac = hexmac
         a.router = router
         a.if = ifName
-        a.updated_on = nil
+        a.updated_at = Time.now
         a.save
         old += 1
       end

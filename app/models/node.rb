@@ -25,7 +25,7 @@ class Node < ActiveRecord::Base
 
   def snmpwalk(var, pw = self.commStr)
     return_val = Hash.new
-    manager = SNMP::Manager.new(:host => self.ip, :community => pw, :mib_modules => $module_list)
+    manager = SNMP::Manager.new(:host => self.ip, :community => pw, :timeout => 10, :mib_modules => $module_list)
     begin
       manager.walk(var) do |row|
         row.each do |vb|
