@@ -1,14 +1,5 @@
 <h1><%= @title -%></h1>
-<%
-uri = request.request_uri.sub(/[&?]order=[^&]+/,'')
-exporturi = request.request_uri.sub(/show_jacks/, 'jackscsv')
-if (uri =~ /\?/)
-  uri += '&'
-else
-  uri += '?'
-end
-session[:return_to] = request.request_uri
--%>
+<% session[:return_to] = request.env['REQUEST_FULLPATH'] -%>
 <a href="<%= exporturi -%>">Export as CSV</a>
 <table class="list">
 <TR>
@@ -27,7 +18,9 @@ session[:return_to] = request.request_uri
 <TD><%= j.ifName -%></TD>
 <TD><%= j.vlan -%></TD>
 <TD><%= j.comment -%></TD>
-<TD><span class='line_menu'>
-      <%= link_to 'Edit', :controller => 'port', :action => 'edit', :id => j %>&nbsp;|&nbsp;
-      <%= link_to 'Del', {:controller => 'port', :action => 'destroy', :id => j}, :confirm => "Are you sure?" %></span></TD></TR>
+  <% if session[:user_level] == 0 %>
+  <TD><span class='line_menu'>
+        <%= link_to 'Edit', :controller => 'ports', :action => 'edit', :id => j %>&nbsp;|&nbsp;
+        <%= link_to 'Del', port(j), method: :delete, data: {:confirm => "Are you sure?"} %></span></TD></TR>
+  <% end %>
 <% end %>

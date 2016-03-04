@@ -50,7 +50,7 @@ session[:return_to] = request.env['ORIGINAL_FULLPATH']
   <td><%= b.router %></td>
   <td><%= b.if %></td>
   <td><%= b.updated_at.strftime('%d-%b-%Y') %></td>
-  <td><%= link_to 'Del', b, method: :delete, data: {confirm: "Are you sure?"} %></span></td>
+  <td><%= link_to_if (session[:user_level] == 0), 'Del', b, method: :delete, data: {confirm: "Are you sure?"} %></span></td>
   </tr>
 <% end %>
 </table>

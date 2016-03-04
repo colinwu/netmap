@@ -1,8 +1,8 @@
 <h1><%= @title -%></h1>
-<% if @nodes.size.zero? %>
+<% if @nodes.empty? %>
   No switches in this building.
 <% else %>
-  <% session[:return_to] = request.request_uri -%>
+  <% session[:return_to] = request.env['REQUEST_FULLPATH'] -%>
   <table class="list">
   <TR><TH>sysName</TH><TH>IP Address</TH><TH>Type</TH><TH>Capability</TH>
 
@@ -12,9 +12,9 @@
     <TH>Show</TH></TR>
   <% end %>
     <% if session[:user_level] == 0 %>
-      <%= render :partial => 'node/list', :collection => @nodes %>
+      <%= render :partial => 'nodes/list', :collection => @nodes %>
     <% else %>
-      <%= render :partial => 'node/list_unprivileged', :collection => @nodes %>
+      <%= render :partial => 'nodes/list_unprivileged', :collection => @nodes %>
     <% end %>
 
   </table>

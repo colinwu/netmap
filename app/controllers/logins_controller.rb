@@ -19,7 +19,7 @@ class LoginsController < ApplicationController
         session[:user_id] = user.id
         session[:user_level] = user.level
         log("#{user.name} logged in")
-        redirect_to (session[:return_to] || {:action => 'index', :controller => '/'})
+        redirect_to (session[:return_to] || :root)
       else
         flash[:notice] = "Invalid user/password combination"
         logger.warn(Time.now.to_s + ": Failed login: #{params[:name]}/#{params[:password]}")
@@ -33,7 +33,7 @@ class LoginsController < ApplicationController
     session[:user_id] = nil
     session[:return_to] = nil
     session[:user_level] = nil
-    redirect_to :action => 'index', :controller => '/'
+    redirect_to :root
   end
 
   # Privileged fucnctions: must be authenticated and authorized to perform

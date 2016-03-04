@@ -16,7 +16,7 @@
     <%= link_to 'Switches', :action => 'show_nodes', :id => b %>|
     <%= link_to 'Jacks', :action => 'show_ports', :id => b %></span></td>
   <td><span class="line_menu">
-  <%= link_to 'Del', {:action => 'destroy', :id => b}, :confirm => "Deleting this building will also delete all switches and jacks associated with this building. Continue?" %></span></td>
+  <%= link_to_if (session[:user_level] == 0), 'Del', b, method: :delete, data: {confirm: "Deleting this building will also delete all switches and jacks associated with this building. Continue?"} %></span></td>
   </tr>
 <% end %>
 </table>

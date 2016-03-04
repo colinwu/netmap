@@ -43,7 +43,7 @@ for @port in @ports.to_a
     <%
   else %>
     <%= image_tag("#{@adminStatus[@port.id]}.png", :title => "Admin Status", :width => '18px') %>
-    <%
+  <%
   end %>
     <%= image_tag("#{@opStatus[@port.id]}.png", :title => "Op Status", :width => '18px') %></span><span style="vertical-align:middle">&nbsp;<%= @port.ifName %></span></TD>
   <% if session[:user_level] == 0 %>
@@ -64,8 +64,8 @@ for @port in @ports.to_a
   <span class="line_menu"><%= link_to image_tag('editdelete.png', :size => '14x14', :alt => 'Del'), @port, method: :delete, data: {confirm: 'Are you sure?'} %></span></td>
   <% else %>
   <TD><%=h @port.label %></TD>
-  <TD><%=h @port.vlan %></TD>
   <TD><%=h @port.building.nil? ? '-' : @port.building.long_name %></TD>
+  <TD><%=h @port.vlan %></TD>
   <TD><%=h @port.comment %></TD>
   <% end %>
   </tr>

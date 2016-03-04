@@ -56,14 +56,14 @@ class BuildingsController < ApplicationController
 
   def show_nodes
     @building = Building.find(params[:id])
-    @nodes = @building.nodes.find :all, :group => 'sysName'
+    @nodes = @building.nodes.all.group('sysName').page(params[:page])
     @title = "Switches in " + @building.long_name
   end
 
   def show_jacks
     @building = Building.find params[:id]
     @order = params[:order]
-    @jacks = @building.ports.all.order((params[:order].nil? || params[:order] =~ /ip/i) ? 'label' : params[:order])
+    @jacks = @building.ports.all.order((params[:order].nil? || params[:order] =~ /ip/i) ? 'label' : params[:order]).page(params[:page])
     @title = "Jacks in " + @building.long_name
   end
 
@@ -87,12 +87,12 @@ class BuildingsController < ApplicationController
       if n.commStr != '**UNKNOWN**'
         begin
           n.snmpwalk('IF-MIB::ifAdminStatus').each do |oid, val|
-            /(\d+)$/.match(oid)
+            /\.(\d+)$/.match(oid)
             pid = n.ports.find_by_ifIndex($1).id
             @adminStatus[pid] = val.to_i
           end
           n.snmpwalk('IF-MIB::ifOperStatus').each do |oid, val|
-            /(\d+)$/.match(oid)
+            /\.(\d+)$/.match(oid)
             pid = n.ports.find_by_ifIndex($1).id
             @opStatus[pid] = val.to_i
           end

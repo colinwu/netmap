@@ -2,6 +2,7 @@
 <TD><%= list_unprivileged.sysName %></TD>
 <td><%= list_unprivileged.ip %></td>
 <td><%= list_unprivileged.platform %></td>
+<td><%= list_unprivileged.capability %></td>
   <td><span class="line_menu">
-  <%= link_to 'Links', :controller => 'nodes', :action => 'show_links', :id => list_unprivileged -%>|<%= link_to 'Jacks', :controller => 'node', :action => 'show_jacks', :id => list_unprivileged -%></span></td>
+  <%= link_to 'Links', :controller => 'nodes', :action => 'show_links', :id => list_unprivileged -%>|<%= link_to 'Jacks', :controller => 'nodes', :action => 'show_jacks', :id => list_unprivileged -%></span></td>
 </tr>

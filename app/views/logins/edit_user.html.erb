@@ -3,7 +3,7 @@
 
 <fieldset>
 <legend>Enter User Details</legend>
-<%= form_tag :action => 'update', :id => @user do %>
+<%= form_tag login_path(@user), method: :patch do %>
   <% if session[:user_level] == 0 %>
     <%= render :partial => 'form' %>
   <% else %>
