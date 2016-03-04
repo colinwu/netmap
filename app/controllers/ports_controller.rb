@@ -210,9 +210,8 @@ class PortsController < ApplicationController
         resp.each do |key,val|
           ifName = val.to_s
           ifIndex = (/\.(\d+)$/.match(key))[1].to_i
-          vlanoid = $mib.oid('vmVlan').to_s + ".#{ifIndex}"
-          if vlanlist.has_key?(vlanoid)
-            vlan = vlanlist[vlanoid].to_s
+          if vlanlist.has_key?("CISCO-VLAN-MEMBERSHIP-MIB::vmVlan.#{ifIndex}")
+            vlan = vlanlist["CISCO-VLAN-MEMBERSHIP-MIB::vmVlan.#{ifIndex}"].to_s
           else
             vlan = 0
           end

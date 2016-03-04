@@ -9,15 +9,6 @@ else
 end
 session[:return_to] = request.env['ORIGINAL_FULLPATH']
 %>
-
-For faster response the results are displayed 25 records per page.
-<%
-unless (@s_ip.nil? && @s_mac.nil? && @s_router.nil?) -%>
-If you don't mind waiting you may display the full results on one page by clicking <a href="<%= nopage_uri %>">here</a> - to paste into an email message, for example.
-<% end -%>
-
-  <p>Click on column title to sort the results by that column or...</p>
-
 <div>
 <table class="list">
 <tr>
