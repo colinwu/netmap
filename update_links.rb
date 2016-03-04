@@ -9,8 +9,6 @@ log.formatter = proc {|severity, datetime, progname, msg| Time.now.to_s + ": #{m
 require 'snmp'
 ::ApplicationController
 
-puts $module_list
-
 Node.where('commStr <> "**UNKNOWN**"').each do |devA|
   remoteIP = Hash.new
   remotePort = Hash.new
@@ -18,8 +16,6 @@ Node.where('commStr <> "**UNKNOWN**"').each do |devA|
   remoteCap = Hash.new
   idList = Array.new
   pwlist = ['mac-snmp', 'fhsr22439', 'public', '**UNKNWON**']
-
-  puts devA.ip
   
   # Retrieve neighbours' IP addresses
   response = devA.snmpwalk('cdpCacheAddress')
