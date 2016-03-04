@@ -162,7 +162,7 @@ class PortsController < ApplicationController
       else
         flash[:notice] = flash[:error] = ''
         dev = Node.find params[:id]
-        if dev.commStr == '**UNKNWON**'
+        if dev.commStr == '**UNKNOWN**'
           flash[:error] += "This device does not have a valid snmp pw<br>\n"
         else
           dev.snmpwalk('IF-MIB::ifName').each do |key,val|

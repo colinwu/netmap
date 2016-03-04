@@ -10,12 +10,13 @@ require 'snmp'
 ::ApplicationController
 
 Node.where('commStr <> "**UNKNOWN**"').each do |devA|
+  log.info("devA = #{devA.ip}")
   remoteIP = Hash.new
   remotePort = Hash.new
   localPort = Hash.new
   remoteCap = Hash.new
   idList = Array.new
-  pwlist = ['mac-snmp', 'fhsr22439', 'public', '**UNKNWON**']
+  pwlist = ['fhsr22439', 'public', '**UNKNOWN**']
   
   # Retrieve neighbours' IP addresses
   response = devA.snmpwalk('cdpCacheAddress')
@@ -60,6 +61,7 @@ Node.where('commStr <> "**UNKNOWN**"').each do |devA|
     # See if it exists in the database
     devB = Node.find_by_ip ip
     if devB.nil?
+      log.info("Remote device (#{ip}) not in database.")
       # neighbour doesn't exist. Get its sysName & platform string
       resp = devA.snmpget("cdpCacheDeviceId.#{id}")
       if resp.to_s =~ /\((.+)\)/
@@ -71,7 +73,6 @@ Node.where('commStr <> "**UNKNOWN**"').each do |devA|
       end
       # Now check if a record with the sysName exists
       devB = Node.find_by_sysName r_sysName
-      log.info("devB = #{r_sysName}")
       if devB.nil?
         resp = devA.snmpget("cdpCachePlatform.#{id}")
         devB = Node.create(:sysName => r_sysName, :ip => ip, :platform => resp.to_s)
@@ -82,7 +83,7 @@ Node.where('commStr <> "**UNKNOWN**"').each do |devA|
         # See if the community string is one of the known ones
         pwlist.each do |pw|
           devB.commStr = pw
-          break if pw == '**UNKNWON**'
+          break if pw == '**UNKNOWN**'
           resp = devB.snmpget('RFC1213-MIB::sysName').to_s #sysName
           break unless resp.nil? or resp.empty?
         end
@@ -90,11 +91,11 @@ Node.where('commStr <> "**UNKNOWN**"').each do |devA|
         if devB.commStr != '**UNKNOWN**'
           devB.get_ifindex
         end
-        log.info("Neighbour device #{devB.sysName} has been added to the database.")
+        log.info("Remote device #{devB.sysName} has been added to the database.")
       else
         resp = devA.snmpget("cdpCacheCapabilities.#{id}")
         # Only the least significant 8 bits are used in the Capabilities field
-        devB.capability = resp.to_s[3].to_s.hex
+        devB.capability = resp.unpack("c#{resp.length}")[3]
         devB.save
       end
     end
@@ -122,10 +123,12 @@ Node.where('commStr <> "**UNKNOWN**"').each do |devA|
     link = Link.where("port_a_id = '#{portA.id}' and port_b_id = '#{portB.id}'").first
     if link.nil?
       Link.create(:port_a_id => portA.id, :port_b_id => portB.id)
+      log.info("#{devA.sysName}:#{portA.ifName} to #{devB.sysName}:#{portB.ifName} link created.")
     end
     link = Link.where("port_a_id = '#{portB.id}' and port_b_id = '#{portA.id}'").first
     if link.nil?
       Link.create(:port_a_id => portB.id, :port_b_id => portA.id)
+      log.info("#{devB.sysName}:#{portB.ifName} to #{devA.sysName}:#{portA.ifName} back link created.")
     end
   end
 

@@ -53,7 +53,7 @@ class LinksController < ApplicationController
     end
 
     portB = Port.where("node_id = '#{nodeB[:id]}' and ifName = '#{nodeB[:ifName]}'").first
-    if (portB.nil? && devB.commStr != '**UNKNWON**')
+    if (portB.nil? && devB.commStr != '**UNKNOWN**')
       # When creating a new port have to retrieve it's ifIndex (via snmp).
       # if no ifIndex then it's not a valid port spec.
       portBok = false
@@ -305,7 +305,7 @@ class LinksController < ApplicationController
               $log.debug("Looking for read community string.")
               pwlist.each do |pw|
                 devB.commStr = pw
-                break if pw == '**UNKNWON**'
+                break if pw == '**UNKNOWN**'
                 resp = devB.snmpget('RFC1213-MIB::sysName.0').to_s #sysName
                 $log.debug("#{ip} is called #{resp.to_s}")
                 break unless resp.nil? or resp.empty?
