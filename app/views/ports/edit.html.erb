@@ -1,7 +1,7 @@
 <h1>Editing Port</h1>
 <%= error_messages_for 'port' %>
 
-<% form_tag :action => 'update', :id => @port do %>
+<%= form_tag port_path(@port), method: :patch do %>
   <%= render :partial => 'form' %>
   <%= submit_tag 'Update' %>
 <% end %>

@@ -1,16 +1,9 @@
-if Rails.env == 'production'
-  log = Logger.new('log/netmap.log', shift_age = 'monthly')
-else
-  logfile = File.open('log/netmap-dev.log', File::WRONLY | File::APPEND | File::CREAT)
-  log = Logger.new(logfile)
-end
-log.formatter = proc {|severity, datetime, progname, msg| Time.now.to_s + ": #{msg}\n" }
-
 require 'snmp'
 ::ApplicationController
+$log.info("update_links started.")
 
 Node.where('commStr <> "**UNKNOWN**"').each do |devA|
-  log.info("devA = #{devA.ip}")
+  $log.debug("devA = #{devA.ip}")
   remoteIP = Hash.new
   remotePort = Hash.new
   localPort = Hash.new
@@ -21,7 +14,7 @@ Node.where('commStr <> "**UNKNOWN**"').each do |devA|
   # Retrieve neighbours' IP addresses
   response = devA.snmpwalk('cdpCacheAddress')
   if response.nil?
-    log.info("No result from #{devA.sysName} for 'cdpCacheAddress'")
+    $log.warn("No result from #{devA.sysName} for 'cdpCacheAddress'")
     next
   else
     response.each do |key,val|
@@ -35,7 +28,7 @@ Node.where('commStr <> "**UNKNOWN**"').each do |devA|
   # Retrieve the name of neighbours' interfaces facing us
   response = devA.snmpwalk('cdpCacheDevicePort')
   if response.nil?
-    log.info("No result from #{devA.sysName} for 'cdpCacheDevicePort'")
+    $log.warn("No result from #{devA.sysName} for 'cdpCacheDevicePort'")
   else
     response.each do |key,val|
       /cdpCacheDevicePort\.(.+)/.match(key)
@@ -61,7 +54,7 @@ Node.where('commStr <> "**UNKNOWN**"').each do |devA|
     # See if it exists in the database
     devB = Node.find_by_ip ip
     if devB.nil?
-      log.info("Remote device (#{ip}) not in database.")
+      $log.info("Remote device (#{ip}) not in database.")
       # neighbour doesn't exist. Get its sysName & platform string
       resp = devA.snmpget("cdpCacheDeviceId.#{id}")
       if resp.to_s =~ /\((.+)\)/
@@ -79,7 +72,7 @@ Node.where('commStr <> "**UNKNOWN**"').each do |devA|
         # remote device capabilities
         resp = devA.snmpget("cdpCacheCapabilities.#{id}")
         # Only the least significant 8 bits are used in the Capabilities field
-        devB.capability = resp.to_s[3].to_s.hex
+        devB.capability = resp.unpack("c#{resp.length}")[3].to_s
         # See if the community string is one of the known ones
         pwlist.each do |pw|
           devB.commStr = pw
@@ -91,7 +84,7 @@ Node.where('commStr <> "**UNKNOWN**"').each do |devA|
         if devB.commStr != '**UNKNOWN**'
           devB.get_ifindex
         end
-        log.info("Remote device #{devB.sysName} has been added to the database.")
+        $log.info("Remote device #{devB.sysName} has been added to the database.")
       else
         resp = devA.snmpget("cdpCacheCapabilities.#{id}")
         # Only the least significant 8 bits are used in the Capabilities field
@@ -104,7 +97,7 @@ Node.where('commStr <> "**UNKNOWN**"').each do |devA|
     portB = Port.where("node_id = '#{devB.id}' and ifName = '#{remotePort[id]}'").first
     if portB.nil?
       portB = Port.create(:ifName => remotePort[id], :node_id => devB.id)
-      log.info("Port #{devB.sysName} #{remotePort[id]} has been added to the database.")
+      $log.info("Remote port #{devB.sysName} #{remotePort[id]} has been added to the database.")
     end
     portB.comment = "link to #{devA.sysName}"
     portB.label = '-'
@@ -114,7 +107,7 @@ Node.where('commStr <> "**UNKNOWN**"').each do |devA|
     portA = Port.where("node_id = '#{devA.id}' and ifName = '#{localPort[id]}'").first
     if portA.nil?
       portA = Port.create(:ifName => localPort[id], :node_id => devA.id)
-      log.info("Port #{devA.sysName} #{portA.ifName} has been added to the database.")
+      $log.info("Local port #{devA.sysName} #{portA.ifName} has been added to the database.")
     end
     portA.comment = "link to #{devB.sysName}"
     portA.label = '-'
@@ -123,13 +116,13 @@ Node.where('commStr <> "**UNKNOWN**"').each do |devA|
     link = Link.where("port_a_id = '#{portA.id}' and port_b_id = '#{portB.id}'").first
     if link.nil?
       Link.create(:port_a_id => portA.id, :port_b_id => portB.id)
-      log.info("#{devA.sysName}:#{portA.ifName} to #{devB.sysName}:#{portB.ifName} link created.")
+      $log.info("#{devA.sysName}:#{portA.ifName} to #{devB.sysName}:#{portB.ifName} link created.")
     end
     link = Link.where("port_a_id = '#{portB.id}' and port_b_id = '#{portA.id}'").first
     if link.nil?
       Link.create(:port_a_id => portB.id, :port_b_id => portA.id)
-      log.info("#{devB.sysName}:#{portB.ifName} to #{devA.sysName}:#{portA.ifName} back link created.")
+      $log.info("#{devB.sysName}:#{portB.ifName} to #{devA.sysName}:#{portA.ifName} back link created.")
     end
   end
 
-end # of detect
+end

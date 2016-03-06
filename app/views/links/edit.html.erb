@@ -1,6 +1,6 @@
 <h1>Editing Link</h1>
 
-<%= form_tag :action => 'update', :id => @link do %>
+<%= form_tag link_path(@link), method: :patch do %>
   <fieldset>
     <div class="row">
       <!--[form:port]-->

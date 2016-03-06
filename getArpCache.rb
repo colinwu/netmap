@@ -1,6 +1,6 @@
-#!/usr/bin/env RAILS_ENV=production ./script/runner
+::ApplicationController
 require 'snmp'
-
+$log.info("getArpCache started.")
 Node.where("(capability & 1) = 1 and commStr <> '**UNKNOWN**'").each do |n|
 
   ifNameCache = Hash.new
@@ -38,5 +38,5 @@ Node.where("(capability & 1) = 1 and commStr <> '**UNKNOWN**'").each do |n|
       end
     end
   end
-  puts("Found #{new} new and #{old} old entries")
+  log.info("Found #{new} new and #{old} old entries on #{router}")
 end

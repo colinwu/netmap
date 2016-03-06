@@ -122,4 +122,13 @@ class SearchesController < ApplicationController
     session[:return_to] = request.env['ORIGINAL_FULLPATH']
     render :template => '/nodes/index'
   end
+  
+  def track
+    # This just shows the form
+    @title = "Track an IP or MAC address"
+  end
+  
+  # This method does the actual tracking
+  def tracker
+  end
 end

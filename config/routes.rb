@@ -52,6 +52,7 @@ Rails.application.routes.draw do
       get 'find_by_vlan'
       get 'platform'
       get 'find_by_platform'
+      get 'track'
     end
   end
   
