@@ -10,4 +10,11 @@
 # Ignore all logfiles and tempfiles.
 /log/*
 !/log/.keep
-/tmp
+/tmp/pids/*
+
+# Ignore rvm files
+/.ruby-gemset
+/.ruby-version
+*.kate-swp
+*~
+.byebug_history

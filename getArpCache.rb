@@ -15,7 +15,7 @@ Node.where("(capability & 1) = 1 and commStr <> '**UNKNOWN**'").each do |n|
       ifIndex = m[1]
       ip = m[2]
       arpval = val
-      hexmac = arpval.unpack("h2h2h2h2h2h2").join('')
+      hexmac = arpval.unpack("H2H2H2H2H2H2").join('')
       if (ifNameCache[ifIndex].nil?)
         ifName = n.snmpget("ifName.#{ifIndex}")
         ifNameCache[ifIndex] = ifName
@@ -25,18 +25,19 @@ Node.where("(capability & 1) = 1 and commStr <> '**UNKNOWN**'").each do |n|
 #      puts("#{ip} <0x#{hexmac}> on #{router}:#{ifName}")
       a = Arpcache.where("ip='#{ip}' and mac='#{hexmac}'").first
       if (a.nil?)
-        a = Arpcache.create( :ip => ip, :mac => hexmac, :router => router, :if => ifName )
+        a = Arpcache.create( :ip => ip, :mac => hexmac, :router => router, :if => ifName, :ifIndex => ifIndex )
         new += 1
       else
         a.ip = ip
         a.mac = hexmac
         a.router = router
         a.if = ifName
+        a.ifIndex = ifIndex
         a.updated_at = Time.now
         a.save
         old += 1
       end
     end
   end
-  log.info("Found #{new} new and #{old} old entries on #{router}")
+  $log.info("Found #{new} new and #{old} old entries on #{router}")
 end

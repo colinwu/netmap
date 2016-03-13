@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160302213233) do
+ActiveRecord::Schema.define(version: 20160309221001) do
 
   create_table "arpcaches", force: :cascade do |t|
     t.string   "ip",         limit: 255, default: "-", null: false
@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(version: 20160302213233) do
     t.string   "if",         limit: 255, default: "-", null: false
     t.datetime "updated_at"
     t.datetime "created_at"
+    t.integer  "ifIndex",    limit: 4
   end
 
   create_table "buildings", force: :cascade do |t|

@@ -54,3 +54,5 @@ gem 'logger', '~> 1.2.8'
 gem 'snmp', '~> 1.2'
 gem 'best_in_place', '~> 3.1'
 gem 'will_paginate'
+gem 'netaddr'
+

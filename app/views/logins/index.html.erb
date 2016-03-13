@@ -287,8 +287,13 @@
             </li>
 
             <li>
-              <a href="/searches/platform">Platform substring</a>
+              <%= link_to "Platform substring", platform_searches_path %>
               <p>Specify a string: e.g. "2924", "3548 XL", etc.</p>
+            </li>
+            
+            <li>
+              <%= link_to "Trace an IP or MAC", tracker_searches_path %>
+              <p>Trace an IP or MAC address to a switch port.</p>
             </li>
           </ul>
         <% if session[:user_level] == 0 %>

@@ -1,0 +1,17 @@
+<h2><%= @title %></h2>
+<p>
+Target IP: <strong><%= @target[:ip_str] -%></strong><br />
+Target MAC: <strong><%= @target[:mac_str] -%></strong>
+</p>
+
+<table class='list'>
+<tr>
+  <th>Router/Switch</th><th>Port</th>
+</tr>
+<% @nodeList.each do |n| %>
+  <tr class=<%= cycle('light','dark') %>>
+    <td><%=h link_to n[:node].sysName, show_jacks_node_path(n[:node]) -%></td>
+    <td><%=h n[:port].ifName -%></td>
+  </tr>
+<% end %>
+</table>

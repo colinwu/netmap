@@ -52,12 +52,12 @@ class PortsController < ApplicationController
         @building_id = @port.building_id
       end
       @vlanOptions = Array.new
-      @port.node.snmpwalk('vtpVlanName').each do |oid,name|
+      @port.node.snmpwalk('CISCO-VTP-MIB::vtpVlanName').each do |oid,name|
         oid =~ /\.(\d+)$/
         vlan = $1.to_i
-        unless vlan == 1 or vlan == 1002 or vlan == 1003 or vlan == 1004 or vlan == 1005
+#         unless vlan == 1 or vlan == 1002 or vlan == 1003 or vlan == 1004 or vlan == 1005
           @vlanOptions << ["#{vlan} - #{name}", vlan]
-        end
+#         end
       end
     end
   end
@@ -71,6 +71,11 @@ class PortsController < ApplicationController
       if @port.vlan != params[:port][:vlan].to_i
         if @port.snmpset('vmVlan',params[:port][:vlan].to_i).nil?
           flash[:error] = $smmpError
+        end
+      end
+      if @port.comment != params[:port][:comment]
+        if @port.snmpset('ifAlias',params[:port][:comment]).nil?
+          flash[:error] = $snmpError
         end
       end
       respond_to do |format|
@@ -97,12 +102,12 @@ class PortsController < ApplicationController
         flash[:error] = "This port is a trunk. You can not assign a vlan to it."
       else
         @vlanOptions = Array.new
-        @port.node.snmpwalk('vtpVlanName').each do |oid,name|
+        @port.node.snmpwalk('CISCO-VTP-MIB::vtpVlanName').each do |oid,name|
           oid =~ /\.(\d+)$/
           vlan = $1.to_i
-          unless vlan == 1 or vlan == 1002 or vlan == 1003 or vlan == 1004 or vlan == 1005
+#           unless vlan == 1 or vlan == 1002 or vlan == 1003 or vlan == 1004 or vlan == 1005
             @vlanOptions << ["#{vlan} - #{name}", vlan]
-          end
+#           end
         end
       end
     end
@@ -206,6 +211,7 @@ class PortsController < ApplicationController
         flash[:error] += "This node does not have a valid snmp community string"
       else
         vlanlist = dev.snmpwalk('vmVlan')
+        descList = dev.snmpwalk('ifAlias')
         resp = dev.snmpwalk('ifName')
         resp.each do |key,val|
           ifName = val.to_s
@@ -215,11 +221,16 @@ class PortsController < ApplicationController
           else
             vlan = 0
           end
+          ifAlias = descList["IF-MIB::ifAlias.#{ifIndex}"]
           port = Port.where(["node_id=? and ifName=?",dev.id,ifName]).first
           if port.nil?
-            port = Port.create(:ifName => ifName, :node_id => dev.id, :ifIndex => ifIndex, :vlan => vlan)
+            port = Port.create(:ifName => ifName, :node_id => dev.id, :ifIndex => ifIndex, :vlan => vlan, :comment => ifAlias)
           else
-            port.update_attributes(:ifIndex => ifIndex, :vlan => vlan)
+            if port.comment.nil? or port.comment.empty? or port.comment == '-'
+              port.update_attributes(:ifIndex => ifIndex, :vlan => vlan, :comment => ifAlias)
+            else
+              port.update_attributes(:ifIndex => ifIndex, :vlan => vlan)
+            end
           end
         end
       end

@@ -52,7 +52,8 @@ Rails.application.routes.draw do
       get 'find_by_vlan'
       get 'platform'
       get 'find_by_platform'
-      get 'track'
+      get 'tracker'
+      post 'find_ip_mac'
     end
   end
   

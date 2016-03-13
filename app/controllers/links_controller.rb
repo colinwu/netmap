@@ -34,8 +34,8 @@ class LinksController < ApplicationController
       else
         response.each do |key, val|
           if x[:val] =~ /#{nodeA[:ifName]}/i
-            oid = $mib.oid('ifName').to_s
-            /#{oid}\.(.+)/.match(key)
+#             oid = $mib.oid('ifName').to_s
+            /\.(\d+)$/.match(key)
             ifIndex = $1
             portA = Port.create(:node_id => nodeA[:id], :ifName => nodeA[:ifName], :ifIndex => ifIndex)
             flash[:notice] += "New port #{devA.sysName}:#{nodeA[:ifName]} added<br />"
@@ -63,8 +63,8 @@ class LinksController < ApplicationController
       else
         response.each do |key,val|
           if x[:val] =~ /#{nodeB[:ifName]}/i
-            oid = $mib.oid('ifName').to_s
-            /#{oid}\.(.+)/.match(key)
+#             oid = $mib.oid('ifName').to_s
+            /\.(\d+)$/.match(key)
             ifIndex = $1
             portB = Port.create(:node_id => nodeB[:id], :ifName => nodeB[:ifName], :ifIndex => ifIndex)
             flash[:notice] += "New port #{devB.sysName}:#{nodeB[:ifName]} added<br />"
@@ -135,8 +135,8 @@ class LinksController < ApplicationController
       else
         response.each do |key,val|
           if val.to_s =~ /#{ifName_a}/i
-            oid = $mib.oid('ifName').to_s
-            /#{oid}\.(.+)/.match(key)
+#             oid = $mib.oid('ifName').to_s
+            /\.(\d+)$/.match(key)
             ifIndex = $1
             port_a = Port.create(:node_id => params[:nodeA], :ifName => ifName_a, :ifIndex => ifIndex)
             portAok = true
@@ -160,8 +160,8 @@ class LinksController < ApplicationController
       else
         response.each do |key, val|
           if val.to_s =~ /#{ifName_b}/i
-            oid = $mib.oid('ifName').to_s
-            /#{oid}\.(.+)/.match(key)
+#             oid = $mib.oid('ifName').to_s
+            /\.(\d+)$/.match(key)
             ifIndex = $1
             port_b = Port.create(:node_id => params[:nodeB], :ifName => ifName_b, :ifIndex => ifIndex)
             portBok = true
@@ -240,7 +240,7 @@ class LinksController < ApplicationController
           flash[:error] += "No result from #{devA.sysName} for 'cdpCacheAddress'<br>"
         else
           response.each do |key,val|
-            /cdpCacheAddress\.(.+)/.match(key)
+            /cdpCacheAddress\.(.+)$/.match(key)
             id = $1
             ip = SNMP::IpAddress.new(val.to_s)
             remoteIP[id] = ip.to_s

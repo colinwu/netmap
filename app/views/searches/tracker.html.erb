@@ -1,0 +1,19 @@
+<h1><%= @title -%></h1>
+
+<%= form_tag find_ip_mac_searches_path, method: :post do %>
+<fieldset>
+<legend>Enter an IP OR MAC address</legend>
+  <p>
+  <label for="search_ip">IP Address</label>
+  <%= text_field :search, :ip %>
+  &nbsp;&nbsp;-- OR --&nbsp;&nbsp;
+  <label for="search_mac">MAC Address</label>
+  <%= text_field :search, :mac %>
+  </p>
+  <p>
+  <%= check_box 'search', 'trust', {:checked => true} %>
+  <label for="search_trust">Trust Netmap's ARP cache? (Will be MUCH slower if you don't)</label>
+  </p>
+  <%= submit_tag "Track" %>
+<% end %>
+</fieldset>
