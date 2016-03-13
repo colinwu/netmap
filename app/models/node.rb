@@ -39,14 +39,21 @@ class Node < ActiveRecord::Base
 
   def snmpset(var, value, pw = self.writeStr)
     $snmpError = String.new
-    manager = SNMP::Manager.new(:host => self.ip, :community => pw, :timeout => 10, :mib_modules => $module_list)
-    snmp_val= manager.get_value(var).class.new(value)
-    begin
-      v = SNMP::VarBind.new($mib.oid(var),snmp_val)
-      resp = manager.set(v)
-      return true
-    rescue
-      $snmpError = SNMP::PDU.new(resp.request_id, resp.varbind_list, resp.error_status).error_status.to_s
+    unless pw.nil? or pw.empty?
+      manager = SNMP::Manager.new(:host => self.ip, :community => pw, :timeout => 10, :mib_modules => $module_list)
+      snmp_val= manager.get_value(var).class.new(value)
+      begin
+        v = SNMP::VarBind.new($mib.oid(var),snmp_val)
+        resp = manager.set(v)
+        return true
+      rescue
+        $snmpError = SNMP::PDU.new(resp.request_id, resp.varbind_list, resp.error_status).error_status.to_s
+        return nil
+      end
+    else
+      $snmpError = "No write string."
+      flash[:error] = "No write string configured for #{self.sysName}"
+      $log.info("No write string configured for #{self.sysName}")
       return nil
     end
   end
