@@ -70,11 +70,13 @@ class PortsController < ApplicationController
       @port = Port.find(params[:id])
       if @port.vlan != params[:port][:vlan].to_i
         if @port.snmpset('vmVlan',params[:port][:vlan].to_i).nil?
+          params[:port].delete(:vlan)
           flash[:error] = $smmpError
         end
       end
       if @port.comment != params[:port][:comment]
         if @port.snmpset('ifAlias',params[:port][:comment]).nil?
+          params[:port].delete(:comment)
           flash[:error] = $snmpError
         end
       end
@@ -118,7 +120,7 @@ class PortsController < ApplicationController
       flash[:error] = "Access denied. Update not permitted."
     else
       @port = Port.find(params[:id])
-      temp = @port.snmpget('vmVlan').to_s
+      temp = @port.snmpget('vmVlan')
       if temp == SNMP::NoSuchInstance
         flash[:error] = "This port is a trunk. You can not assign a vlan to it."
       else

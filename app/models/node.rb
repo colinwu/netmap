@@ -52,7 +52,6 @@ class Node < ActiveRecord::Base
       end
     else
       $snmpError = "No write string."
-      flash[:error] = "No write string configured for #{self.sysName}"
       $log.info("No write string configured for #{self.sysName}")
       return nil
     end
