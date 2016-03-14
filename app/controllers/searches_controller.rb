@@ -126,6 +126,12 @@ class SearchesController < ApplicationController
   def tracker
     # This just shows the form
     @title = "Track an IP or MAC address"
+    unless params[:ip].nil? or params[:ip].empty?
+      @ip = params[:ip]
+    end
+    unless params[:mac].nil? or params[:mac].empty?
+      @mac = parmas[:mac]
+    end
   end
   
   # This method does the actual tracking

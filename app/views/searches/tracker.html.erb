@@ -5,10 +5,10 @@
 <legend>Enter an IP OR MAC address</legend>
   <p>
   <label for="search_ip">IP Address</label>
-  <%= text_field :search, :ip %>
+  <%= text_field :search, :ip, {:value => @ip} %>
   &nbsp;&nbsp;-- OR --&nbsp;&nbsp;
   <label for="search_mac">MAC Address</label>
-  <%= text_field :search, :mac %>
+  <%= text_field :search, :mac, {:value => @mac} %>
   </p>
   <p>
   <%= check_box 'search', 'trust', {:checked => true} %>

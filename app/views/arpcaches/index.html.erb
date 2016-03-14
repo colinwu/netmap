@@ -45,8 +45,8 @@ session[:return_to] = request.env['ORIGINAL_FULLPATH']
 <TH></TH></tr>
 <% @arplist.each do |b| %>
 <tr class=<%= cycle("light", "dark") -%>>
-  <TD><%= b.ip %></TD>
-  <td><%= b.mac %></td>
+  <TD><%= link_to b.ip, "/searches/tracker?ip=#{b.ip}" %></TD>
+  <td><%= link_to b.mac, "/searches/tracker?mac=#{b.mac}" %></td>
   <td><%= b.router %></td>
   <td><%= b.if %></td>
   <td><%= b.updated_at.strftime('%d-%b-%Y') %></td>
