@@ -1,10 +1,15 @@
-<!-- The next line is a kludge to work around a bug that prevents in-place editing from working inside a partial cf: http://www.paulwelty.com/ruby-on-rails/in_place_editor-with-a-collection-in-a-partial-in-ruby-on-rails/ -->
-<%- @port = list -%>
-
+<% unless list.ifName == '**UNKNOWN**'
+     adm = list.snmpget('IF-MIB::ifAdminStatus').to_i 
+     op = list.snmpget('IF-MIB::ifOperStatus').to_i
+   else
+     adm = 0
+     op = 0
+   end
+%>
 <TR class=<%= cycle('light','dark') -%>>
-  <TD><%= best_in_place @port, :label, as: :input %></TD>
+  <TD><%= best_in_place list, :label, as: :input %></TD>
   <TD><%= list.node.sysName -%></TD>
-  <TD><%= link_to image_tag("#{@adminStatus[list.id]}.png", title: "Admin Status", width: '18px'), toggle_admin_port_path(list), data: {confirm: 'Are you sure?'} %>&nbsp;<%= image_tag("#{@opStatus[list.id]}.png", title: "Op Status", width: '18px') %>&nbsp;<%= list.ifName -%></TD>
+  <TD><%= link_to(image_tag("#{adm}.png", title: "Admin Status", width: '18px'), toggle_admin_port_path(list), data: {confirm: 'Are you sure?'}) %>&nbsp;<%= image_tag("#{op}.png", title: "Op Status", width: '18px') %>&nbsp;<%= list.ifName -%></TD>
   <TD><% if list.vlan.nil? %>
   -
   <% elsif list.vlan == 0 %>
@@ -14,9 +19,8 @@
   <% end %>
   </TD>
 
-  <TD><%= best_in_place @port, :comment, as: :input %></TD>
+  <TD><%= best_in_place list, :comment, as: :input %></TD>
   <TD><span class="line_menu"><%= link_to image_tag("info.jpg", size: "14x15", alt: 'Status'), stats_port_path(list) %></span>
   <span class='line_menu'><%= link_to image_tag('edit.png', :size => "14x14", :alt => 'Edit'), stats_port_path(list) %></span>
   <span class='line_menu'><%= link_to image_tag('editdelete.png', :size => '14x14', :alt => 'Del'), {:controller => 'ports', :action => 'destroy', :id => list}, :confirm => "Are you sure?" %></span></TD>
-
 </TR>

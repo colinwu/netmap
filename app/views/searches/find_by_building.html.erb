@@ -17,9 +17,9 @@
   <% end %>
 </TR>
 <% if session[:user_level] == 0 %>
-  <%= render :partial => 'list', :collection => @port %>
+  <%= render :partial => 'list', :collection => @port, locals: {adm: @adminStatus, op: @opStatus} %>
 <% else %>
-  <%= render :partial => 'unpriv_list', :collection => @port %>
+  <%= render :partial => 'unpriv_list', :collection => @port, locals: {adm: @adminStatus, op: @opStatus} %>
 <% end %>
 </table>
 

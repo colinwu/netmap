@@ -1,7 +1,15 @@
+<% unless list.ifName == '**UNKNOWN**'
+     adm = list.snmpget('IF-MIB::ifAdminStatus').to_i 
+     op = list.snmpget('IF-MIB::ifOperStatus').to_i
+   else
+     adm = 0
+     op = 0
+   end
+%>
 <TR class=<%= cycle('light','dark') -%>>
   <TD><%= unpriv_list.label -%></TD>
   <TD><%= unpriv_list.node.sysName -%></TD>
-  <TD><%= image_tag("#{@adminStatus[unpriv_list.id]}.png", width: '18px', title: "Admin Status") %>'>&nbsp;<%= image_tag("#{@opStatus[unpriv_list.id]}.png", width: '18px', title: "Oper Status")%>'></TD>
+  <TD><%= image_tag("#{adm}.png", width: '18px', title: "Admin Status") %>'>&nbsp;<%= image_tag("#{op}.png", width: '18px', title: "Oper Status")%>'></TD>
   <TD><%= unpriv_list.vlan -%></TD>
   <TD><%= unpriv_list.comment -%></TD>
 </TR>

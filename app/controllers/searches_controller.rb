@@ -141,7 +141,10 @@ class SearchesController < ApplicationController
     @title = "Tracker Result"
     @search = params[:search]
     @target = {:ip_str => '', :mac_str => '', :ifIndex => 0}
-    @nodeList = []
+    @ports = []
+    @adminStatus = Hash.new
+    @opStatus = Hash.new
+    
     seedrtr = nil
     net = nil
     beenThere = []
@@ -257,7 +260,7 @@ class SearchesController < ApplicationController
           $log.debug("Target: ip = #{@target[:ip_str]}, mac = #{@target[:mac_str]}")
           $log.debug("Device: #{seedrtr.sysName}, interface " + seedPort.ifName)
           
-          @nodeList.push({:node => seedrtr, :port => seedPort})
+          @ports.push(seedPort)
           neighbour = seedrtr.findNeighbour(rtrIfIndex)
           
           $log.debug("Neighbour found: #{neighbour.sysName}")
@@ -266,11 +269,14 @@ class SearchesController < ApplicationController
             unless neighbour.commStr == '**UNKNOWN**'
               port = neighbour.findCAM(@target)
               
-              $log.debug("Target found on interface #{port.ifName} on #{neighbour.sysName}")
+              $log.info("Target found on interface #{port.ifName} on #{neighbour.sysName}")
               
-              @nodeList.push({:node => neighbour, :port => port})
+              @ports.push(port)
               neighbour = neighbour.findNeighbour(port.ifIndex)
             else
+              port = Port.new(:ifName => '**UNKNOWN**', :node_id => neighbour.id, :vlan => nil, :comment => '-')
+              $log.info("Device #{neighbour.sysName} does not have SNMP community string.")
+              @ports.push(port)
               neighbour = nil
             end
           end # while not neighbour.nil?
