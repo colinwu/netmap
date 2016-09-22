@@ -130,7 +130,7 @@ class SearchesController < ApplicationController
       @ip = params[:ip]
     end
     unless params[:mac].nil? or params[:mac].empty?
-      @mac = parmas[:mac]
+      @mac = params[:mac]
     end
   end
   
