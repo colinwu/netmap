@@ -147,6 +147,7 @@ class Node < ActiveRecord::Base
     ifType = self.snmpget("IF-MIB::ifType.#{target[:ifIndex]}").to_i
     if ifType == 53
       vlanStr = self.snmpget("IF-MIB::ifName.#{target[:ifIndex]}").to_s
+      $log.debug("vlanStr = #{vlanStr}")
       if vlanStr =~ /^v[^0-9]*(\d+)$/i
         vlan = $1
         vlanpw = self.commStr + '@' + vlan.to_s

@@ -268,11 +268,16 @@ class SearchesController < ApplicationController
           while not neighbour.nil?
             unless neighbour.commStr == '**UNKNOWN**'
               port = neighbour.findCAM(@target)
-              
-              $log.info("Target found on interface #{port.ifName} on #{neighbour.sysName}")
-              
-              @ports.push(port)
-              neighbour = neighbour.findNeighbour(port.ifIndex)
+              if port.nil?
+                $log.info("#{@target[:mac_str]} could not be found on #{neighbour.sysName}")
+                flash[:error] = "#{@target[:mac_str]} could not be found on #{neighbour.sysName}"
+                neighbour = nil
+              else
+                $log.info("Target found on interface #{port.ifName} on #{neighbour.sysName}")
+                
+                @ports.push(port)
+                neighbour = neighbour.findNeighbour(port.ifIndex)
+              end
             else
               port = Port.new(:ifName => '**UNKNOWN**', :node_id => neighbour.id, :vlan => nil, :comment => '-')
               $log.info("Device #{neighbour.sysName} does not have SNMP community string.")
