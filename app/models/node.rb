@@ -156,6 +156,7 @@ class Node < ActiveRecord::Base
       $log.debug("fdPort = #{fdPort}")
       unless fdPort.to_s == 'noSuchInstance'
         port = self.snmpget("dot1dBasePortIfIndex.#{fdPort}",vlanpw).to_i
+        
         ifType = self.snmpget("IF-MIB::ifType.#{port}",vlanpw).to_i
         if ifType == 53
           self.snmpwalk("pagpGroupIfIndex",vlanpw).each do |k,v|

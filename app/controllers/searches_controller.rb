@@ -233,6 +233,7 @@ class SearchesController < ApplicationController
       
       catch :findNet do
         routers.each do |rtr|
+          $log.debug("Searching #{rtr.sysName} for connected network.")
           sortedRoutes = rtr.get_routes.sort_by do |r|
             maskArr = r[:mask].split('.')
             binMask = maskArr[0].to_i*256**3 + maskArr[1].to_i*256**2 + maskArr[2].to_i*256 + maskArr[3].to_i
@@ -241,6 +242,7 @@ class SearchesController < ApplicationController
             if rt[:type] == 3 # 3 = local net
               net = NetAddr::CIDR.create("#{rt[:net]} #{rt[:mask]}")
               if net.contains?(@target[:ip_str])
+                $log.debug("Directly connected network found on #{rtr.sysName}")
                 seedrtr = rtr
                 throw :findNet
               end
