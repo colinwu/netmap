@@ -158,7 +158,8 @@ class SearchesController < ApplicationController
         # if it is valid then find the corresponding MAC address
         @target[:ip_str] = @search[:ip]
         if @search[:trust] == '1'
-          a = Arpcache.where(["ip = ?", @target[:ip_str]]).first
+          # got an IP. Find the most recent MAC address associated with it.
+          a = Arpcache.where(["ip = ?", @target[:ip_str]]).order(:updated_at).last
           unless a.nil?
             @target[:mac_str] = a.mac
             @target[:ifIndex] = a.ifIndex
@@ -193,8 +194,8 @@ class SearchesController < ApplicationController
       if mac =~ /^[0-9a-fA-F]{12,12}$/
         @target[:mac_str] = mac
         if @search[:trust] == '1'
-          # got a mac address, find the ip
-          a = Arpcache.where(["mac = ?", @target[:mac_str]]).first
+          # got a mac address, find the most recent IP
+          a = Arpcache.where(["mac = ?", @target[:mac_str]]).order(:updated_at).last
           unless a.nil?
             @target[:ip_str] = a[:ip]
             @target[:ifIndex] = a[:ifIndex]

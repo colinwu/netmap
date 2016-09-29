@@ -23,7 +23,8 @@ Node.where("(capability & 1) = 1 and commStr <> '**UNKNOWN**'").each do |n|
         ifName = ifNameCache[ifIndex]
       end
 #      puts("#{ip} <0x#{hexmac}> on #{router}:#{ifName}")
-      a = Arpcache.where("ip='#{ip}' and mac='#{hexmac}'").first
+      # Modify the oldest arp entry
+      a = Arpcache.where("mac='#{hexmac}'").order(:updated_at).first
       if (a.nil?)
         a = Arpcache.create( :ip => ip, :mac => hexmac, :router => router, :if => ifName, :ifIndex => ifIndex )
         new += 1
